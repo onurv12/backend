@@ -20,7 +20,7 @@ Flight::register( 'userManager', 'userManager', array($DB) );
 // Routes
 //////////////////////////////////////////////////////
 
-Flight::route('/', function(){
+Flight::route('/', function () {
 
     $userManager = Flight::userManager();
 
