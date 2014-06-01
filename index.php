@@ -4,6 +4,7 @@ require 'config/database.php';
 require 'vendor/mikecao/flight/flight/Flight.php';
 require '../dbWrapper/dbWrapper.class.php';
 require '../userManagement/userManager.class.php';
+require 'validation.class.php';
 
 $dbSettings = Array();
 // DBName
