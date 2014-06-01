@@ -39,16 +39,18 @@ Flight::route('GET /login', function () {
 	$headers = apache_request_headers();
 	$request = Flight::request();
 
-	if (isset($headers["username"]) && isset($headers["password"])) {
-		
-		$userdata = $userManager->login($headers["username"], $headers["password"]);
+	if (isset($headers["username"], $headers["password"])) {
+		try {
+			$userdata = $userManager->login($headers["username"], $headers["password"]);
 
-		if ($userdata) {
-			echo json_encode(true);
-		} else {
-			echo json_encode(false);
+			if ($userdata) {
+				echo json_encode(true);
+			} else {
+				echo json_encode(false);
+			}
+		} catch (Exception $e) {
+			Flight::halt(401, "401 - User suspended");
 		}
-
 	} else {
 		Flight::halt(400, "400 - Bad Request");
 	}
