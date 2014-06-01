@@ -1,16 +1,17 @@
 <?php
 
+require 'config/database.php';
 require 'vendor/mikecao/flight/flight/Flight.php';
 require '../dbWrapper/dbWrapper.class.php';
 require '../userManagement/userManager.class.php';
 
 $dbSettings = Array();
 // DBName
-$dbSettings[] = "storyboard";
+$dbSettings[] = DBName;
 //DBUser
-$dbSettings[] = "storyboard";
+$dbSettings[] = DBUser;
 //DBPassword
-$dbSettings[] = "storyboard";
+$dbSettings[] = DBPassword;
 
 Flight::register( 'DB', 'dbWrapper', $dbSettings );
 $DB = Flight::DB();
