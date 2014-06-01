@@ -65,6 +65,32 @@ Flight::route('GET /logout', function () {
 	echo "";
 });
 
+// Registration
+Flight::route('POST /user', function () {
+
+	$userManager = Flight::userManager();
+
+	if (!$userManager->getLoginState()) {
+		$request = Flight::request();
+		$json = json_decode($request->body, true);
+		
+		if (isset($json["Name"], $json["Fullname"], $json["Password"], $json["Email"], $json["GravatarEmail"])) {
+			try {
+				$userManager->createUser($json["Name"], $json["Fullname"], $json["Password"], $json["Email"], $json["GravatarEmail"]);
+			} catch (Exception $e) {
+				Flight::halt(409, "Conflict. User already exists.");
+			}
+
+			// TODO: Send a mail here
+			echo "true";
+		} else {
+			Flight::halt(400, "Missing information");
+		}
+	} else {
+		Flight::halt(412, "412 - You may not be logged in while registering a new user.");
+	}
+});
+
 //////////////////////////////////////////////////////
 
 // Initialize Flight
