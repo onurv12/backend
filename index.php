@@ -75,8 +75,19 @@ Flight::route('POST /user', function () {
 	if (!$userManager->getLoginState()) {
 		$request = Flight::request();
 		$json = json_decode($request->body, true);
+
+		if (!isset($json["GravatarEmail"])) {
+			$json["GravatarEmail"] = null;
+		}
+
 		
-		if (isset($json["Name"], $json["Fullname"], $json["Password"], $json["Email"], $json["GravatarEmail"])) {
+		if (isset($json["Name"], $json["Fullname"], $json["Password"], $json["Email"])) {
+			var_dump(validation::minLength($json["Name"], 3), validation::minLength($json["Fullname"], 3), validation::minLength($json["Password"], 6), validation::email($json["Email"]), $json["GravatarEmail"] == null, validation::email($json["GravatarEmail"]));
+
+			if (!(validation::minLength($json["Name"], 3) && validation::minLength($json["Fullname"], 3) && validation::minLength($json["Password"], 6) && validation::email($json["Email"]) && ($json["GravatarEmail"] == null || validation::email($json["GravatarEmail"])))) {
+				Flight::halt(400, "Bad request.");
+			}
+
 			try {
 				$userManager->createUser($json["Name"], $json["Fullname"], $json["Password"], $json["Email"], $json["GravatarEmail"]);
 			} catch (Exception $e) {
