@@ -6,6 +6,7 @@ require '../dbWrapper/dbWrapper.class.php';
 require '../userManagement/userManager.class.php';
 require 'validation.class.php';
 
+
 $dbSettings = Array();
 // DBName
 $dbSettings[] = DBName;
@@ -65,6 +66,55 @@ Flight::route('GET /logout', function () {
 
 	$userManager->logout();
 	echo "";
+});
+
+Flight::route('GET /isAdministratorLoggedIn', function() {
+	$DB = Flight::DB();
+	$userManager = Flight::userManager();
+	if ($userManager->getIsLoggedInAsAdministrator())
+		echo json_encode(true);
+	else
+		echo json_encode(false);
+});
+
+Flight::route('GET /activeUsers', function() {
+	$DB = Flight::DB();
+	$userManager = Flight::userManager();
+	$allUsers = $userManager->getAllActiveUsers();
+	if ($allUsers) {
+		echo json_encode($allUsers);
+	} else {
+		Flight::halt(400, "400 - Bad Request");//TODO: BEtter error code?
+	}
+});
+
+Flight::route('GET /suspendedUsers', function() {
+	$DB = Flight::DB();
+	$userManager = Flight::userManager();
+	$allUsers = $userManager->getAllSuspendedUsers();
+	if ($allUsers) {
+		echo json_encode($allUsers);
+	} else {
+		$allUsers = Array();
+		echo json_encode($allUsers);
+	}
+});
+
+//Activate user
+Flight::route('POST /activateUser', function() {
+	$DB = Flight::DB();
+	$userManager = Flight::userManager();
+	if (!$userManager->getIsLoggedInAsAdministrator())
+		Flight::halt(401, "401 Unauthorized - You are not logged in as administrator.");
+	
+	$request = Flight::request();
+	$json = json_decode($request->body, true);
+	if (isset($json["Username"])) {
+		$userManager->activateUser($json["Username"]);
+		echo json_encode(true);
+	} else {
+		echo json_encode(false);
+	}
 });
 
 // Registration
