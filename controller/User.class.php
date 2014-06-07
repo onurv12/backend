@@ -14,12 +14,13 @@ abstract class UserController {
 				$userdata = $userManager->login($headers["username"], $headers["password"]);
 
 				if ($userdata) {
-					echo json_encode(true);
+					Flight::json($userdata);
 				} else {
 					echo json_encode(false);
 				}
 			} catch (Exception $e) {
-				Flight::halt(401, "401 - User suspended");
+				var_dump($e);
+				//Flight::halt(401, "401 - User suspended");
 			}
 		} else {
 			Flight::halt(400, "400 - Bad Request");
@@ -63,6 +64,13 @@ abstract class UserController {
 		} else {
 			Flight::halt(412, "412 - You may not be logged in while registering a new user.");
 		}
+	}
+
+	public static function getSession () {
+		$userManager = Flight::userManager();
+
+		// Return the result
+		Flight::json($userManager->getSession());
 	}
 }
 

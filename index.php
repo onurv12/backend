@@ -42,6 +42,11 @@ Flight::route('GET /logout', function () {
 	UserController::logout();
 });
 
+// Get the session of the logged in user
+Flight::route('GET /user', function () {
+	UserController::getSession();
+});
+
 // Registration
 Flight::route('POST /user', function () {
 	UserController::registration();
