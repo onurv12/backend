@@ -41,7 +41,7 @@ abstract class UserController {
 			$json = json_decode($request->body, true);
 
 			if (!isset($json["GravatarEmail"])) {
-				$json["GravatarEmail"] = null;
+				$json["GravatarEmail"] = "";
 			}
 
 			
