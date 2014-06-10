@@ -16,7 +16,7 @@ abstract class UserController {
 				if ($userdata) {
 					Flight::json($userdata);
 				} else {
-					echo json_encode(false);
+					Flight::json(false);
 				}
 			} catch (Exception $e) {
 				Flight::halt(401, "401 - User suspended");
