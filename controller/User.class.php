@@ -19,8 +19,7 @@ abstract class UserController {
 					echo json_encode(false);
 				}
 			} catch (Exception $e) {
-				var_dump($e);
-				//Flight::halt(401, "401 - User suspended");
+				Flight::halt(401, "401 - User suspended");
 			}
 		} else {
 			Flight::halt(400, "400 - Bad Request");
