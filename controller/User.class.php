@@ -64,6 +64,45 @@ abstract class UserController {
 			Flight::halt(412, "412 - You may not be logged in while registering a new user.");
 		}
 	}
+	
+	public static function getActiveUsers() {
+		$DB = Flight::DB();
+		$userManager = Flight::userManager();
+		$allUsers = $userManager->getAllActiveUsers();
+		if ($allUsers) {
+			Flight::json($allUsers);
+		} else {
+			Flight::halt(400, "400 - Bad Request");//TODO: BEtter error code?
+		}
+	}
+	
+	public static function getSuspendedUsers() {
+		$DB = Flight::DB();
+		$userManager = Flight::userManager();
+		$allUsers = $userManager->getAllSuspendedUsers();
+		if ($allUsers) {
+			Flight::json($allUsers);
+		} else {
+			$allUsers = Array();
+			Flight::json($allUsers);
+		}
+	}
+	
+	public static function activateUser() {
+		$DB = Flight::DB();
+		$userManager = Flight::userManager();
+		if (!$userManager->getSession()["isAdmin"])
+			Flight::halt(401, "401 Unauthorized - You are not logged in as administrator.");
+	
+		$request = Flight::request();
+		$json = json_decode($request->body, true);
+		if (isset($json["Username"])) {
+			$userManager->activateUser($json["Username"]);
+			Flight::json(true);
+		} else {
+			Flight::json(false);
+		}
+	}
 
 	public static function getSession () {
 		$userManager = Flight::userManager();

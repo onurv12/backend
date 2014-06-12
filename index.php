@@ -48,53 +48,17 @@ Flight::route('GET /user', function () {
 	UserController::getSession();
 });
 
-Flight::route('GET /isAdministratorLoggedIn', function() {
-	$DB = Flight::DB();
-	$userManager = Flight::userManager();
-	if ($userManager->getIsLoggedInAsAdministrator())
-		echo json_encode(true);
-	else
-		echo json_encode(false);
+Flight::route('GET /users/active', function() {
+	UserController::getActiveUsers();
 });
 
-Flight::route('GET /activeUsers', function() {
-	$DB = Flight::DB();
-	$userManager = Flight::userManager();
-	$allUsers = $userManager->getAllActiveUsers();
-	if ($allUsers) {
-		echo json_encode($allUsers);
-	} else {
-		Flight::halt(400, "400 - Bad Request");//TODO: BEtter error code?
-	}
-});
-
-Flight::route('GET /suspendedUsers', function() {
-	$DB = Flight::DB();
-	$userManager = Flight::userManager();
-	$allUsers = $userManager->getAllSuspendedUsers();
-	if ($allUsers) {
-		echo json_encode($allUsers);
-	} else {
-		$allUsers = Array();
-		echo json_encode($allUsers);
-	}
+Flight::route('GET /users/suspended', function() {
+	UserController::getSuspendedUsers();
 });
 
 //Activate user
-Flight::route('POST /activateUser', function() {
-	$DB = Flight::DB();
-	$userManager = Flight::userManager();
-	if (!$userManager->getIsLoggedInAsAdministrator())
-		Flight::halt(401, "401 Unauthorized - You are not logged in as administrator.");
-	
-	$request = Flight::request();
-	$json = json_decode($request->body, true);
-	if (isset($json["Username"])) {
-		$userManager->activateUser($json["Username"]);
-		echo json_encode(true);
-	} else {
-		echo json_encode(false);
-	}
+Flight::route('POST /user/activate', function() {
+	UserController::activateUser();
 });
 
 // Registration
