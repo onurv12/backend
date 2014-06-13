@@ -2,10 +2,13 @@
 
 require 'config/database.php';
 require 'vendor/mikecao/flight/flight/Flight.php';
+require 'vendor/swiftmailer/swiftmailer/lib/swift_required.php';
 require '../dbWrapper/dbWrapper.class.php';
 require '../userManagement/userManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
+
+require_once 'services/Mail.class.php';
 
 $dbSettings = Array();
 // DBName

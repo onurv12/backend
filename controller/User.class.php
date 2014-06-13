@@ -1,5 +1,7 @@
 <?php
 
+require_once 'services/Mail.class.php';
+
 abstract class UserController {
 
 	public static function login () {
@@ -55,6 +57,9 @@ abstract class UserController {
 				} catch (Exception $e) {
 					Flight::halt(409, "Conflict. User already exists.");
 				}
+
+				// Sending a confirmation mail
+				MailService::sendTemplate("Registration complete", "noreply@paperdreamer.org", "Paperdreamer", $json["Email"], $json["Fullname"], "mailTemplates/welcome.html", "mailTemplates/welcome.txt", Array("Fullname" => $json["Fullname"]));
 
 				echo "true";
 			} else {
