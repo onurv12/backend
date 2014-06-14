@@ -8,8 +8,6 @@ require '../userManagement/userManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
 
-require_once 'services/Mail.class.php';
-
 $dbSettings = Array();
 // DBName
 $dbSettings[] = DBName;
@@ -48,6 +46,19 @@ Flight::route('GET /logout', function () {
 // Get the session of the logged in user
 Flight::route('GET /user', function () {
 	UserController::getSession();
+});
+
+Flight::route('GET /users/active', function() {
+	UserController::getActiveUsers();
+});
+
+Flight::route('GET /users/suspended', function() {
+	UserController::getSuspendedUsers();
+});
+
+//Activate user
+Flight::route('POST /user/activate', function() {
+	UserController::activateUser();
 });
 
 // Registration
