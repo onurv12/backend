@@ -1,5 +1,7 @@
 <?php
 
+require_once 'services/Mail.class.php';
+
 abstract class UserController {
 
 	public static function login () {
@@ -56,6 +58,9 @@ abstract class UserController {
 					Flight::halt(409, "Conflict. User already exists.");
 				}
 
+				// Sending a confirmation mail
+				MailService::sendTemplate("Registration complete", "noreply@paperdreamer.org", "Paperdreamer", $json["Email"], $json["Fullname"], "mailTemplates/welcome.html", "mailTemplates/welcome.txt", Array("Fullname" => $json["Fullname"]));
+
 				echo "true";
 			} else {
 				Flight::halt(400, "Missing information");
@@ -97,8 +102,17 @@ abstract class UserController {
 		$request = Flight::request();
 		$json = json_decode($request->body, true);
 		if (isset($json["Username"])) {
-			$userManager->activateUser($json["Username"]);
-			Flight::json(true);
+			$userID = $userManager->activateUser($json["Username"]);
+			
+			if ($userID) {
+				// Getting the user's data
+				$userdata = $userManager->getUserData($userID);
+				// Sending a mail
+				MailService::sendTemplate("Account activated", "noreply@paperdreamer.org", "Paperdreamer", $userdata["Email"], $userdata["Fullname"], "mailTemplates/activationComplete.html", "mailTemplates/activationComplete.txt", Array("Fullname" => $userdata["Fullname"], "Username" => $userdata["Name"]));
+				Flight::json(true);
+			} else {
+				Flight::json(false);
+			}	
 		} else {
 			Flight::json(false);
 		}

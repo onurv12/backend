@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "e84b0a1d2569be3e17fda99b437e518e",
+    "hash": "7be997deac3bb461999b801ae98959a4",
     "packages": [
         {
             "name": "mikecao/flight",
@@ -11,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "b9b2d0fa2d75e6b2f606fbd0d9a8059a0f741578"
+                "reference": "bd0c9474553bccb8a40c09ada703c6345e71b4ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/b9b2d0fa2d75e6b2f606fbd0d9a8059a0f741578",
-                "reference": "b9b2d0fa2d75e6b2f606fbd0d9a8059a0f741578",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/bd0c9474553bccb8a40c09ada703c6345e71b4ac",
+                "reference": "bd0c9474553bccb8a40c09ada703c6345e71b4ac",
                 "shasum": ""
             },
             "require": {
@@ -25,6 +26,7 @@
             "type": "library",
             "autoload": {
                 "files": [
+                    "flight/autoload.php",
                     "flight/Flight.php"
                 ]
             },
@@ -42,7 +44,61 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2014-03-19 03:48:33"
+            "time": "2014-05-23 07:22:53"
+        },
+        {
+            "name": "swiftmailer/swiftmailer",
+            "version": "v5.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swiftmailer/swiftmailer.git",
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.2-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/swift_required.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Chris Corbyn"
+                }
+            ],
+            "description": "Swiftmailer, free feature-rich PHP mailer",
+            "homepage": "http://swiftmailer.org",
+            "keywords": [
+                "mail",
+                "mailer"
+            ],
+            "time": "2014-05-08 08:11:19"
         }
     ],
     "packages-dev": [
@@ -53,7 +109,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mikecao/flight": 20
+        "mikecao/flight": 20,
+        "swiftmailer/swiftmailer": 0
     },
     "platform": [
 
