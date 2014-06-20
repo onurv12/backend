@@ -61,6 +61,10 @@ Flight::route('POST /user/activate', function() {
 	UserController::activateUser();
 });
 
+Flight::route('POST /user/change', function(){
+	UserController::changeLevel();
+});
+
 // Registration
 Flight::route('POST /user', function () {
 	UserController::registration();
