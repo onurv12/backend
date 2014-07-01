@@ -118,19 +118,14 @@ abstract class UserController {
 		}
 	}
 	
-	public static function changeLevel(){
-		echo "User.class.php function called";
-		$DB=Flight::DB();
-		//TODO: possible errors
-		$userManager=Flight::userManager();
-		$request=Flight::request();
-		$json=json_decode($request->body, true);
+	public static function changeRole(){
+		$DB = Flight::DB();
+		$userManager = Flight::userManager();
+		$request = Flight::request();
+		$json = json_decode($request->body, true);
 		if(isset($json["UserID"])&&isset($json["Level"])){
-			echo "userid level set";
-			$success=$userManager->changeLevel($json["UserID"],$json["Level"]);
+			$success = $userManager->changeRole($json["UserID"],$json["Level"]);
 			if($success){
-				//TODO: better error message
-				echo "success";
 				Flight::json(true);
 			}else{
 				Flight::json(false);
