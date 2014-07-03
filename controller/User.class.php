@@ -118,20 +118,20 @@ abstract class UserController {
 		}
 	}
 	
-	public static function changeRole(){
+	public static function changeRole() {
 		$DB = Flight::DB();
 		$userManager = Flight::userManager();
 		$request = Flight::request();
 		$json = json_decode($request->body, true);
-		if(isset($json["UserID"])&&isset($json["Level"])){
-			$success = $userManager->changeRole($json["UserID"],$json["Level"]);
-			if($success){
+		if(isset($json["UserID"]) && isset($json["Role"])) {
+			$success = $userManager->changeRole($json["UserID"],$json["Role"]);
+			if($success) {
 				Flight::json(true);
-			}else{
+			} else {
 				Flight::json(false);
 			}
-		}else{
-			Flight::json(false);
+		} else {
+			Flight::halt(400, "400 - Bad Request");
 		}
 	}
 

@@ -61,7 +61,7 @@ Flight::route('POST /user/activate', function() {
 	UserController::activateUser();
 });
 
-Flight::route('POST /user/role/change', function(){
+Flight::route('PUT /user', function() {
 	UserController::changeRole();
 });
 
