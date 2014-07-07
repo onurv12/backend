@@ -121,6 +121,9 @@ abstract class UserController {
 	public static function changeRole() {
 		$DB = Flight::DB();
 		$userManager = Flight::userManager();
+		if(!$userManager->getSession()["isAdmin"]) {
+			Flight::halt(403, "403 - Forbidden Access");
+		}
 		$request = Flight::request();
 		$json = json_decode($request->body, true);
 		if(isset($json["UserID"]) && isset($json["Role"])) {
