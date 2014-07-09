@@ -93,6 +93,19 @@ abstract class UserController {
 		}
 	}
 	
+	public static function getBelongedProjects() {
+		$productionManager = Flight::productionManager();
+		$userManager = Flight::userManager();
+		$userID = $userManager->getSession()["ID"];
+		$belongedProjects = $productionManager->getBelongedProjects($userID);
+		if ($belongedProjects) {
+			Flight::json($belongedProjects);
+		} else {
+			$belongedProjects = Array();
+			Flight::json($belongedProjects);
+		}
+	}
+	
 	public static function activateUser() {
 		$DB = Flight::DB();
 		$userManager = Flight::userManager();

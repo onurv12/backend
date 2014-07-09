@@ -5,6 +5,7 @@ require 'vendor/mikecao/flight/flight/Flight.php';
 require 'vendor/swiftmailer/swiftmailer/lib/swift_required.php';
 require '../dbWrapper/dbWrapper.class.php';
 require '../userManagement/userManager.class.php';
+require '../userManagement/productionManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
 
@@ -19,6 +20,7 @@ $dbSettings[] = DBPassword;
 Flight::register( 'DB', 'dbWrapper', $dbSettings );
 $DB = Flight::DB();
 Flight::register( 'userManager', 'userManager', array($DB) );
+Flight::register( 'productionManager', 'productionManager', array($DB) );
 
 //////////////////////////////////////////////////////
 // Routes
@@ -54,6 +56,11 @@ Flight::route('GET /users/active', function() {
 
 Flight::route('GET /users/suspended', function() {
 	UserController::getSuspendedUsers();
+});
+
+// Get the projects the user belongs
+Flight::route('GET /projects/belonged', function() {
+	UserController::getBelongedProjects();
 });
 
 //Activate user
