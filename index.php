@@ -58,6 +58,11 @@ Flight::route('GET /users/suspended', function() {
 	UserController::getSuspendedUsers();
 });
 
+// Get all projects
+Flight::route('GET /projects', function() {
+	UserController::getAllProjects();
+});
+
 // Get the projects the user belongs
 Flight::route('GET /projects/belonged', function() {
 	UserController::getBelongedProjects();
