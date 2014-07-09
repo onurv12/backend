@@ -62,6 +62,7 @@ Flight::route('POST /user/activate', function() {
 });
 
 Flight::route('PUT /user', function() {
+	//TODO: Add a detection which evaluates what kind of change it is
 	UserController::changeRole();
 });
 

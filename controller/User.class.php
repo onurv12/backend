@@ -121,7 +121,7 @@ abstract class UserController {
 	public static function changeRole() {
 		$DB = Flight::DB();
 		$userManager = Flight::userManager();
-		if(!$userManager->getSession()["isAdmin"]) {
+		if(!$userManager->checkAdmin()) {
 			Flight::halt(403, "403 - Forbidden Access");
 		}
 		$request = Flight::request();
