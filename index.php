@@ -8,6 +8,7 @@ require '../userManagement/userManager.class.php';
 require '../userManagement/productionManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
+require 'controller/Project.class.php';
 
 $dbSettings = Array();
 // DBName
@@ -60,12 +61,12 @@ Flight::route('GET /users/suspended', function() {
 
 // Get all projects
 Flight::route('GET /projects', function() {
-	UserController::getAllProjects();
+	ProjectController::getAllProjects();
 });
 
 // Get the projects the user belongs
 Flight::route('GET /projects/belonged', function() {
-	UserController::getBelongedProjects();
+	ProjectController::getBelongedProjects();
 });
 
 //Activate user
