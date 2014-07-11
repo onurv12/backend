@@ -117,6 +117,26 @@ abstract class UserController {
 			Flight::json(false);
 		}
 	}
+	
+	public static function changeRole() {
+		$DB = Flight::DB();
+		$userManager = Flight::userManager();
+		if(!$userManager->checkAdmin()) {
+			Flight::halt(403, "403 - Forbidden Access");
+		}
+		$request = Flight::request();
+		$json = json_decode($request->body, true);
+		if(isset($json["UserID"]) && isset($json["Role"])) {
+			$success = $userManager->changeRole($json["UserID"],$json["Role"]);
+			if($success) {
+				Flight::json(true);
+			} else {
+				Flight::json(false);
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
 
 	public static function getSession () {
 		$userManager = Flight::userManager();
