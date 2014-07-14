@@ -3,27 +3,23 @@
 abstract class ProjectController {
 	
 	public static function getAllProjects(){
-		$productionManager = Flight::productionManager();
+		$productionManager = Flight::ProductionManager();
 		$allProjects = $productionManager->getAllProjects();
-		if ($allProjects) {
-			Flight::json($allProjects);
-		} else {
+		if(!$allProjects) {
 			$allProjects = Array();
-			Flight::json($allProjects);
 		}
+		Flight::json($allProjects);
 	}
 	
 	public static function getBelongedProjects() {
-		$productionManager = Flight::productionManager();
-		$userManager = Flight::userManager();
+		$productionManager = Flight::ProductionManager();
+		$userManager = Flight::UserManager();
 		$userID = $userManager->getSession()["ID"];
 		$belongedProjects = $productionManager->getBelongedProjects($userID);
-		if ($belongedProjects) {
-			Flight::json($belongedProjects);
-		} else {
+		if(!$belongedProjects) {
 			$belongedProjects = Array();
-			Flight::json($belongedProjects);
 		}
+		Flight::json($belongedProjects);
 	}
 }
 

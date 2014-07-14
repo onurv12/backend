@@ -4,8 +4,8 @@ require 'config/database.php';
 require 'vendor/mikecao/flight/flight/Flight.php';
 require 'vendor/swiftmailer/swiftmailer/lib/swift_required.php';
 require '../dbWrapper/dbWrapper.class.php';
-require '../userManagement/userManager.class.php';
-require '../userManagement/productionManager.class.php';
+require '../userManagement/UserManager.class.php';
+require '../userManagement/ProductionManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
 require 'controller/Project.class.php';
@@ -20,8 +20,8 @@ $dbSettings[] = DBPassword;
 
 Flight::register( 'DB', 'dbWrapper', $dbSettings );
 $DB = Flight::DB();
-Flight::register( 'userManager', 'userManager', array($DB) );
-Flight::register( 'productionManager', 'productionManager', array($DB) );
+Flight::register( 'UserManager', 'UserManager', array($DB) );
+Flight::register( 'ProductionManager', 'ProductionManager', array($DB) );
 
 //////////////////////////////////////////////////////
 // Routes
@@ -29,7 +29,7 @@ Flight::register( 'productionManager', 'productionManager', array($DB) );
 
 Flight::route('/', function () {
 
-    $userManager = Flight::userManager();
+    $userManager = Flight::UserManager();
 
     if ($userManager->getLoginState()) {
     	echo "Yep. It works.";

@@ -6,7 +6,7 @@ abstract class UserController {
 
 	public static function login () {
 		$DB = Flight::DB();
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 
 		$headers = apache_request_headers();
 		$request = Flight::request();
@@ -29,14 +29,14 @@ abstract class UserController {
 	}
 
 	public static function logout () {
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 
 		$userManager->logout();
 		echo "";
 	}
 
 	public static function registration () {
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 
 		if (!$userManager->getLoginState()) {
 			$request = Flight::request();
@@ -72,7 +72,7 @@ abstract class UserController {
 	
 	public static function getActiveUsers() {
 		$DB = Flight::DB();
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 		$allUsers = $userManager->getAllActiveUsers();
 		if ($allUsers) {
 			Flight::json($allUsers);
@@ -83,7 +83,7 @@ abstract class UserController {
 	
 	public static function getSuspendedUsers() {
 		$DB = Flight::DB();
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 		$allUsers = $userManager->getAllSuspendedUsers();
 		if ($allUsers) {
 			Flight::json($allUsers);
@@ -95,7 +95,7 @@ abstract class UserController {
 	
 	public static function activateUser() {
 		$DB = Flight::DB();
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 		if (!$userManager->getSession()["isAdmin"])
 			Flight::halt(401, "401 Unauthorized - You are not logged in as administrator.");
 	
@@ -120,7 +120,7 @@ abstract class UserController {
 	
 	public static function changeRole() {
 		$DB = Flight::DB();
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 		if(!$userManager->checkAdmin()) {
 			Flight::halt(403, "403 - Forbidden Access");
 		}
@@ -139,7 +139,7 @@ abstract class UserController {
 	}
 
 	public static function getSession () {
-		$userManager = Flight::userManager();
+		$userManager = Flight::UserManager();
 
 		// Return the result
 		Flight::json($userManager->getSession());
