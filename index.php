@@ -4,9 +4,11 @@ require 'config/database.php';
 require 'vendor/mikecao/flight/flight/Flight.php';
 require 'vendor/swiftmailer/swiftmailer/lib/swift_required.php';
 require '../dbWrapper/dbWrapper.class.php';
-require '../userManagement/userManager.class.php';
+require '../userManagement/UserManager.class.php';
+require '../userManagement/ProductionManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
+require 'controller/Project.class.php';
 
 $dbSettings = Array();
 // DBName
@@ -18,7 +20,8 @@ $dbSettings[] = DBPassword;
 
 Flight::register( 'DB', 'dbWrapper', $dbSettings );
 $DB = Flight::DB();
-Flight::register( 'userManager', 'userManager', array($DB) );
+Flight::register( 'UserManager', 'UserManager', array($DB) );
+Flight::register( 'ProductionManager', 'ProductionManager', array($DB) );
 
 //////////////////////////////////////////////////////
 // Routes
@@ -26,7 +29,7 @@ Flight::register( 'userManager', 'userManager', array($DB) );
 
 Flight::route('/', function () {
 
-    $userManager = Flight::userManager();
+    $userManager = Flight::UserManager();
 
     if ($userManager->getLoginState()) {
     	echo "Yep. It works.";
@@ -54,6 +57,16 @@ Flight::route('GET /users/active', function() {
 
 Flight::route('GET /users/suspended', function() {
 	UserController::getSuspendedUsers();
+});
+
+// Get all projects
+Flight::route('GET /projects', function() {
+	ProjectController::getAllProjects();
+});
+
+// Get the projects the user belongs
+Flight::route('GET /projects/belonged', function() {
+	ProjectController::getBelongedProjects();
 });
 
 //Activate user
