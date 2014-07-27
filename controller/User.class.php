@@ -131,7 +131,7 @@ abstract class UserController {
 			if($success) {
 				Flight::json(true);
 			} else {
-				Flight::json(false);
+				Flight::halt(400, "400 - Bad Request");
 			}
 		} else {
 			Flight::halt(400, "400 - Bad Request");
