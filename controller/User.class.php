@@ -128,10 +128,10 @@ abstract class UserController {
 		$json = json_decode($request->body, true);
 		if(isset($json["UserID"]) && isset($json["Role"])) {
 			$success = $userManager->changeRole($json["UserID"],$json["Role"]);
-			if($success) {
+			if ($success) {
 				Flight::json(true);
 			} else {
-				Flight::json(false);
+				Flight::halt(403, "403 - Forbidden");
 			}
 		} else {
 			Flight::halt(400, "400 - Bad Request");
