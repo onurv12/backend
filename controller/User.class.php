@@ -40,7 +40,7 @@ abstract class UserController {
 
 		if (!$userManager->getLoginState()) {
 			$request = Flight::request();
-			$json = json_decode($request->body, true);
+			$json = json_decode($request->getBody(), true);
 
 			if (!isset($json["GravatarEmail"])) {
 				$json["GravatarEmail"] = "";
@@ -100,7 +100,7 @@ abstract class UserController {
 			Flight::halt(401, "401 Unauthorized - You are not logged in as administrator.");
 	
 		$request = Flight::request();
-		$json = json_decode($request->body, true);
+		$json = json_decode($request->getBody(), true);
 		if (isset($json["Username"])) {
 			$userID = $userManager->activateUser($json["Username"]);
 			
@@ -125,7 +125,7 @@ abstract class UserController {
 			Flight::halt(403, "403 - Forbidden Access");
 		}
 		$request = Flight::request();
-		$json = json_decode($request->body, true);
+		$json = json_decode($request->getBody(), true);
 		if(isset($json["UserID"]) && isset($json["Role"])) {
 			$success = $userManager->changeRole($json["UserID"],$json["Role"]);
 			if($success) {
