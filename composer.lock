@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "bd0c9474553bccb8a40c09ada703c6345e71b4ac"
+                "reference": "24f084fa097cb79859c8f91907d4b3be887beaf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/bd0c9474553bccb8a40c09ada703c6345e71b4ac",
-                "reference": "bd0c9474553bccb8a40c09ada703c6345e71b4ac",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/24f084fa097cb79859c8f91907d4b3be887beaf7",
+                "reference": "24f084fa097cb79859c8f91907d4b3be887beaf7",
                 "shasum": ""
             },
             "require": {
@@ -44,20 +44,20 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2014-05-23 07:22:53"
+            "time": "2014-08-05 08:18:37"
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
+                "reference": "2b9af56cc676c338d52fca4c657e5bdff73bb7af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
-                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/2b9af56cc676c338d52fca4c657e5bdff73bb7af",
+                "reference": "2b9af56cc676c338d52fca4c657e5bdff73bb7af",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-05-08 08:11:19"
+            "time": "2014-06-13 11:44:54"
         }
     ],
     "packages-dev": [
@@ -112,6 +112,7 @@
         "mikecao/flight": 20,
         "swiftmailer/swiftmailer": 0
     },
+    "prefer-stable": false,
     "platform": [
 
     ],

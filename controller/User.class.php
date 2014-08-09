@@ -125,9 +125,8 @@ abstract class UserController {
 			Flight::halt(403, "403 - Forbidden Access");
 		}
 		$request = Flight::request();
-		$json = json_decode($request->getBody(), true);
-		if(isset($json["UserID"]) && isset($json["Role"])) {
-			$success = $userManager->changeRole($json["UserID"],$json["Role"]);
+		if(isset($request->data->UserID) && isset($request->data->Role)) {
+			$success = $userManager->changeRole($request->data->UserID, $request->data->Role);
 			if ($success) {
 				Flight::json(true);
 			} else {
