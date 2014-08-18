@@ -70,6 +70,16 @@ abstract class UserController {
 		}
 	}
 	
+	public static function getUser($userID) {
+		$userManager = Flight::UserManager();
+		$user = $userManager->getUserData($userID);
+		if($user) {
+			Flight::json($user);
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
+	
 	public static function getActiveUsers() {
 		$DB = Flight::DB();
 		$userManager = Flight::UserManager();
