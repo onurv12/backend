@@ -59,8 +59,8 @@ Flight::route('GET /users/suspended', function() {
 	UserController::getSuspendedUsers();
 });
 
-Flight::route('POST /project', function() {
-	ProjectController::deleteProject();
+Flight::route('DELETE /project/@projectID', function($projectID) {
+	ProjectController::deleteProject($projectID);
 });
 
 Flight::route('PUT /project', function() {

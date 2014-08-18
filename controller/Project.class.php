@@ -1,5 +1,7 @@
 <?php
 
+require '../userManagement/ProjectPermission.class.php';
+
 abstract class ProjectController {
 	
 	public static function getAllProjects(){
@@ -25,17 +27,21 @@ abstract class ProjectController {
 	public static function editProject() {
 		$productionManager = Flight::ProductionManager();
 		$userManager = Flight::UserManager();
-		if(!$userManager->checkAdmin()) {
+		$userID = $userManager->getSession()["ID"];
+		$request = Flight::request();
+		$projectID = $request->data->ProjectID;
+		$action = $request->data->Action;
+		
+		if(!$userManager->checkAdmin() && ProjectPermission::getProjectRole($userID, $projectID) != "Director") {
 			Flight::halt(403, "403 - Forbidden Access");
 		}
-		$request = Flight::request();
-		if(isset($request->data->ProjectID) && isset($request->data->Action)) {
-			switch($request->data->Action) {
+		if(isset($projectID) && isset($action)) {
+			switch($action) {
 				case "open":
-					$success = $productionManager->openProject($request->data->ProjectID);
+					$success = $productionManager->openProject($projectID);
 					break;
 				case "close":
-					$success = $productionManager->closeProject($request->data->ProjectID);
+					$success = $productionManager->closeProject($projectID);
 					break;
 			}
 			if($success) {
@@ -46,15 +52,14 @@ abstract class ProjectController {
 		}
 	}
 	
-	public static function deleteProject() {
+	public static function deleteProject($projectID) {
 		$productionManager = Flight::ProductionManager();
 		$userManager = Flight::UserManager();
 		if(!$userManager->checkAdmin()) {
 			Flight::halt(403, "403 - Forbidden Access");
 		}
-		$request = Flight::request();
-		if(isset($request->data->ProjectID)) {
-			$success = $productionManager->deleteProject($request->data->ProjectID);	
+		if(isset($projectID)) {
+			$success = $productionManager->deleteProject($projectID);	
 			if($success) {
 				Flight::json(true);
 			} else {
