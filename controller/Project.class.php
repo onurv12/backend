@@ -47,8 +47,10 @@ abstract class ProjectController {
 			if($success) {
 				Flight:json(true);
 			} else {
-				Flight::halt(403, "403 - Forbidden");
+				Flight::json(false);
 			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
 		}
 	}
 	
@@ -63,7 +65,7 @@ abstract class ProjectController {
 			if($success) {
 				Flight::json(true);
 			} else {
-				Flight::halt(403, "403 - Forbidden");
+				Flight::halt(false);
 			}
 		} else {
 			Flight::halt(400, "400 - Bad Request");
