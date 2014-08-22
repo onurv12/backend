@@ -86,10 +86,9 @@ abstract class ProjectController {
 			$panels[] =$panel;
 		}
 
-		$project = $projectInfo;
-		$project["Panels"] = $panels;
+		$projectInfo["Panels"] = $panels;
 
-		Flight::json($project);
+		Flight::json($projectInfo);
 	}
 
 
