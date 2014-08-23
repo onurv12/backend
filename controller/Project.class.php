@@ -101,6 +101,8 @@ abstract class ProjectController {
 
 		if ($canvas) {
 			$canvas["Assets"] = $canvasManager->getAssets($CanvasID);
+		} else {
+			Flight::halt(404, "404 - The canvas you've tried to load does not exist.");
 		}
 
 		Flight::json($canvas);
