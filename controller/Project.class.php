@@ -1,4 +1,5 @@
 <?php
+require_once "../userManagement/CanvasManager.php";
 
 require '../userManagement/ProjectPermission.class.php';
 
@@ -63,6 +64,50 @@ abstract class ProjectController {
 			$belongedProjects = Array();
 		}
 		Flight::json($belongedProjects);
+	}
+
+	// Gets a certain project respecting the ID
+	public static function get($ID) {
+		// TODO: Make sure the user is allowed to access this project...!
+		$DB = Flight::DB();
+		$productionManager = Flight::ProductionManager();
+		$canvasManager = new CanvasManager($DB);
+
+		$projectInfo = $productionManager->getProject($ID);
+
+		$panelsTmp = $canvasManager->getPanels($ID);
+		$panels = array();
+
+		if (!count($panelsTmp) || !$projectInfo) {
+			Flight::halt(404, "This project could not be found.");
+		}
+
+		foreach ($panelsTmp as $panel) {
+			$panel["Assets"] = $canvasManager->getAssets($panel["ID"]);
+
+			$panels[] =$panel;
+		}
+
+		$projectInfo["Panels"] = $panels;
+
+		Flight::json($projectInfo);
+	}
+
+
+	public static function getCanvas ($ProjectID, $CanvasID) {
+		// TODO: Make sure the user is allowed to access this project...!
+		$DB = Flight::DB();
+		$canvasManager = new CanvasManager($DB);
+
+		$canvas = $canvasManager->getCanvas($ProjectID, $CanvasID);
+
+		if ($canvas) {
+			$canvas["Assets"] = $canvasManager->getAssets($CanvasID);
+		} else {
+			Flight::halt(404, "404 - The canvas you've tried to load does not exist.");
+		}
+
+		Flight::json($canvas);
 	}
 	
 	public static function editProject() {
