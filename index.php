@@ -64,6 +64,14 @@ Flight::route('POST /project', function() {
 	ProjectController::createProject();
 });
 
+Flight::route('DELETE /project/@projectID', function($projectID) {
+	ProjectController::deleteProject($projectID);
+});
+
+Flight::route('PUT /project', function() {
+	ProjectController::editProject();
+});
+
 // Get all projects
 Flight::route('GET /projects', function() {
 	ProjectController::getAllProjects();

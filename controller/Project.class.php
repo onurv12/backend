@@ -1,6 +1,8 @@
 <?php
 require_once "../userManagement/CanvasManager.php";
 
+require '../userManagement/ProjectPermission.class.php';
+
 abstract class ProjectController {
 
 	public static function createProject() {
@@ -106,6 +108,54 @@ abstract class ProjectController {
 		}
 
 		Flight::json($canvas);
+	}
+	
+	public static function editProject() {
+		$productionManager = Flight::ProductionManager();
+		$userManager = Flight::UserManager();
+		$userID = $userManager->getSession()["ID"];
+		$request = Flight::request();
+		$projectID = $request->data->ProjectID;
+		$action = $request->data->Action;
+		
+		if(!$userManager->checkAdmin() && ProjectPermission::getProjectRole($userID, $projectID) != "Director") {
+			Flight::halt(403, "403 - Forbidden Access");
+		}
+		if(isset($projectID) && isset($action)) {
+			switch($action) {
+				case "open":
+					$success = $productionManager->openProject($projectID);
+					break;
+				case "close":
+					$success = $productionManager->closeProject($projectID);
+					break;
+			}
+			if($success) {
+				Flight:json(true);
+			} else {
+				Flight::json(false);
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
+	
+	public static function deleteProject($projectID) {
+		$productionManager = Flight::ProductionManager();
+		$userManager = Flight::UserManager();
+		if(!$userManager->checkAdmin()) {
+			Flight::halt(403, "403 - Forbidden Access");
+		}
+		if(isset($projectID)) {
+			$success = $productionManager->deleteProject($projectID);	
+			if($success) {
+				Flight::json(true);
+			} else {
+				Flight::halt(false);
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
 	}
 }
 

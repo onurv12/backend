@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "c0fa0bed7c893694c640224db22a221d8bbdff4e"
+                "reference": "24f084fa097cb79859c8f91907d4b3be887beaf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/c0fa0bed7c893694c640224db22a221d8bbdff4e",
-                "reference": "c0fa0bed7c893694c640224db22a221d8bbdff4e",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/24f084fa097cb79859c8f91907d4b3be887beaf7",
+                "reference": "24f084fa097cb79859c8f91907d4b3be887beaf7",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2014-07-23 07:39:00"
+            "time": "2014-08-05 08:18:37"
         },
         {
             "name": "swiftmailer/swiftmailer",
