@@ -64,6 +64,14 @@ Flight::route('POST /project', function() {
 	ProjectController::createProject();
 });
 
+Flight::route('DELETE /project/@projectID', function($projectID) {
+	ProjectController::deleteProject($projectID);
+});
+
+Flight::route('PUT /project', function() {
+	ProjectController::editProject();
+});
+
 // Get all projects
 Flight::route('GET /projects', function() {
 	ProjectController::getAllProjects();
@@ -72,6 +80,26 @@ Flight::route('GET /projects', function() {
 // Get the projects the user belongs
 Flight::route('GET /projects/belonged', function() {
 	ProjectController::getBelongedProjects();
+});
+
+Flight::route('GET /project/@id', function ($id) {
+	ProjectController::get($id);
+});
+
+Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
+	ProjectController::getCanvas($projectID, $canvasID);
+});
+
+Flight::route('POST /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
+	// TODO!!!
+});
+
+Flight::route('PUT /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
+	// TODO!!!
+});
+
+Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
+	// TODO!!!
 });
 
 //Activate user

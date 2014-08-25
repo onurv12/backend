@@ -1,4 +1,7 @@
 <?php
+require_once "../userManagement/CanvasManager.php";
+
+require '../userManagement/ProjectPermission.class.php';
 
 abstract class ProjectController {
 
@@ -61,6 +64,98 @@ abstract class ProjectController {
 			$belongedProjects = Array();
 		}
 		Flight::json($belongedProjects);
+	}
+
+	// Gets a certain project respecting the ID
+	public static function get($ID) {
+		// TODO: Make sure the user is allowed to access this project...!
+		$DB = Flight::DB();
+		$productionManager = Flight::ProductionManager();
+		$canvasManager = new CanvasManager($DB);
+
+		$projectInfo = $productionManager->getProject($ID);
+
+		$panelsTmp = $canvasManager->getPanels($ID);
+		$panels = array();
+
+		if (!count($panelsTmp) || !$projectInfo) {
+			Flight::halt(404, "This project could not be found.");
+		}
+
+		foreach ($panelsTmp as $panel) {
+			$panel["Assets"] = $canvasManager->getAssets($panel["ID"]);
+
+			$panels[] =$panel;
+		}
+
+		$projectInfo["Panels"] = $panels;
+
+		Flight::json($projectInfo);
+	}
+
+
+	public static function getCanvas ($ProjectID, $CanvasID) {
+		// TODO: Make sure the user is allowed to access this project...!
+		$DB = Flight::DB();
+		$canvasManager = new CanvasManager($DB);
+
+		$canvas = $canvasManager->getCanvas($ProjectID, $CanvasID);
+
+		if ($canvas) {
+			$canvas["Assets"] = $canvasManager->getAssets($CanvasID);
+		} else {
+			Flight::halt(404, "404 - The canvas you've tried to load does not exist.");
+		}
+
+		Flight::json($canvas);
+	}
+	
+	public static function editProject() {
+		$productionManager = Flight::ProductionManager();
+		$userManager = Flight::UserManager();
+		$userID = $userManager->getSession()["ID"];
+		$request = Flight::request();
+		$projectID = $request->data->ProjectID;
+		$action = $request->data->Action;
+		
+		if(!$userManager->checkAdmin() && ProjectPermission::getProjectRole($userID, $projectID) != "Director") {
+			Flight::halt(403, "403 - Forbidden Access");
+		}
+		if(isset($projectID) && isset($action)) {
+			switch($action) {
+				case "open":
+					$success = $productionManager->openProject($projectID);
+					break;
+				case "close":
+					$success = $productionManager->closeProject($projectID);
+					break;
+			}
+			if($success) {
+				Flight:json(true);
+			} else {
+				Flight::json(false);
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
+	
+	public static function deleteProject($projectID) {
+		$productionManager = Flight::ProductionManager();
+		$userManager = Flight::UserManager();
+		if(!$userManager->checkAdmin()) {
+			Flight::halt(403, "403 - Forbidden Access");
+		}
+		if(isset($projectID)) {
+			$success = $productionManager->deleteProject($projectID);	
+			if($success) {
+				Flight::json(true);
+			} else {
+				Flight::halt(false);
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
 	}
 }
 
