@@ -78,14 +78,14 @@ abstract class ProjectController {
 		$panelsTmp = $canvasManager->getPanels($ID);
 		$panels = array();
 
-		if (!count($panelsTmp) || !$projectInfo) {
+		if (!$projectInfo) {
 			Flight::halt(404, "This project could not be found.");
 		}
 
 		foreach ($panelsTmp as $panel) {
 			$panel["Assets"] = $canvasManager->getAssets($panel["ID"]);
 
-			$panels[] =$panel;
+			$panels[] = $panel;
 		}
 
 		$projectInfo["Panels"] = $panels;
