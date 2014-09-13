@@ -99,7 +99,7 @@ Flight::route('PUT /project/@projectID/canvas/@canvasID', function ($projectID, 
 });
 
 Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
-	// TODO!!!
+	ProjectController::removeCanvas($projectID, $canvasID);
 });
 
 //Activate user

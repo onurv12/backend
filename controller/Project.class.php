@@ -157,6 +157,25 @@ abstract class ProjectController {
 			Flight::halt(400, "400 - Bad Request");
 		}
 	}
+
+	public static function removeCanvas($projectID, $canvasID) {
+		$DB = Flight::DB();
+		$canvasManager = new CanvasManager($DB);
+		$userManager = Flight::UserManager();
+		
+		// TODO: Is the user allowed to remove a canvas?!
+
+		if(isset($projectID)) {
+			$success = $canvasManager->removeCanvas($projectID, $canvasID);
+			if($success) {
+				Flight::json(true);
+			} else {
+				Flight::halt(404, "This canvas does not exist.");
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
 }
 
 ?>
