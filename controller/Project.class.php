@@ -45,6 +45,24 @@ abstract class ProjectController {
 			Flight::halt(403, "Please specify at least name and director");
 		}
 	}
+
+	public static function newCanvas ($projectID) {
+		$DB = Flight::DB();
+		$productionManager = Flight::ProductionManager();
+		$canvasManager = new CanvasManager($DB);
+
+		$requestData = Flight::request()->data;
+		if (!isset($requestData["ProjectID"], $requestData["PositionIndex"], $requestData["Title"], $requestData["Description"], $requestData["Notes"]) || $projectID != $requestData["ProjectID"]) {
+			Flight::halt(403, "You've not specified enough information.");
+		}
+		if (!$productionManager->projectExists($projectID)) {
+			Flight::halt(404, "This project does not exist.");
+		}
+
+		// TODO: Return error if user is not allowed to do that!
+
+		$canvasManager->addCanvas($projectID, $requestData["PositionIndex"], $requestData["Title"], $requestData["Description"], $requestData["Notes"]);
+	}
 	
 	public static function getAllProjects(){
 		$productionManager = Flight::ProductionManager();
@@ -108,6 +126,15 @@ abstract class ProjectController {
 		}
 
 		Flight::json($canvas);
+	}
+	
+	public static function getProjectsOfUser($userID) {
+		$productionManager = Flight::ProductionManager();
+		$projectsOU = $productionManager->getBelongedProjects($userID);
+		if(!$projectsOU) {
+			$projectsOU = Array();
+		}
+		Flight::json($projectsOU);
 	}
 	
 	public static function editProject() {
