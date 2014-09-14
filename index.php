@@ -51,6 +51,14 @@ Flight::route('GET /user', function () {
 	UserController::getSession();
 });
 
+Flight::route('GET /user/@id', function($id) {
+	UserController::getUser($id);
+});
+
+Flight::route('GET /user/@id/projects', function($id) {
+	ProjectController::getProjectsOfUser($id);
+});
+
 Flight::route('GET /users/active', function() {
 	UserController::getActiveUsers();
 });
@@ -108,8 +116,7 @@ Flight::route('POST /user/activate', function() {
 });
 
 Flight::route('PUT /user', function() {
-	//TODO: Add a detection which evaluates what kind of change it is
-	UserController::changeRole();
+	UserController::updateUser();
 });
 
 // Registration

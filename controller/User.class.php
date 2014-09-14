@@ -70,6 +70,16 @@ abstract class UserController {
 		}
 	}
 	
+	public static function getUser($userID) {
+		$userManager = Flight::UserManager();
+		$user = $userManager->getUserData($userID);
+		if($user) {
+			Flight::json($user);
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
+	
 	public static function getActiveUsers() {
 		$DB = Flight::DB();
 		$userManager = Flight::UserManager();
@@ -118,21 +128,27 @@ abstract class UserController {
 		}
 	}
 	
-	public static function changeRole() {
-		$DB = Flight::DB();
+	public static function updateUser() {
 		$userManager = Flight::UserManager();
-		if(!$userManager->checkAdmin()) {
-			Flight::halt(403, "403 - Forbidden Access");
-		}
 		$request = Flight::request();
-		$json = $request->data;
-		if(isset($json["UserID"]) && isset($json["Role"])) {
-			$success = $userManager->changeRole($json["UserID"],$json["Role"]);
-			if($success) {
-				Flight::json(true);
+		$userID = $request->data->UserID;
+		$action = $request->data->Action;
+		$newValue = $request->data->NewValue;
+		if(isset($userID) && isset($action) && isset($newValue)) {		
+			if($action == "Role") {
+				if(!$userManager->checkAdmin()) {
+					Flight::halt(403, "403 - Forbidden Access");
+				}
+				$success = $userManager->changeRole($userID, $newValue);
+				Flight::json($success);
 			} else {
-				Flight::json(false);
+				if(!$userManager->checkAdmin() && $userID != $userManager->getSession()["ID"]) {
+					Flight::halt(403, "403 - Forbidden Access");
+				}
+				$success = $userManager->updateUser($userID, $action, $newValue);
+				Flight::json($success);
 			}
+
 		} else {
 			Flight::halt(400, "400 - Bad Request");
 		}

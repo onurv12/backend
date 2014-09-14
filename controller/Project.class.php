@@ -110,6 +110,15 @@ abstract class ProjectController {
 		Flight::json($canvas);
 	}
 	
+	public static function getProjectsOfUser($userID) {
+		$productionManager = Flight::ProductionManager();
+		$projectsOU = $productionManager->getBelongedProjects($userID);
+		if(!$projectsOU) {
+			$projectsOU = Array();
+		}
+		Flight::json($projectsOU);
+	}
+	
 	public static function editProject() {
 		$productionManager = Flight::ProductionManager();
 		$userManager = Flight::UserManager();
