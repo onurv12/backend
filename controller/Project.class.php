@@ -78,14 +78,14 @@ abstract class ProjectController {
 		$panelsTmp = $canvasManager->getPanels($ID);
 		$panels = array();
 
-		if (!count($panelsTmp) || !$projectInfo) {
+		if (!$projectInfo) {
 			Flight::halt(404, "This project could not be found.");
 		}
 
 		foreach ($panelsTmp as $panel) {
 			$panel["Assets"] = $canvasManager->getAssets($panel["ID"]);
 
-			$panels[] =$panel;
+			$panels[] = $panel;
 		}
 
 		$projectInfo["Panels"] = $panels;
@@ -108,6 +108,15 @@ abstract class ProjectController {
 		}
 
 		Flight::json($canvas);
+	}
+	
+	public static function getProjectsOfUser($userID) {
+		$productionManager = Flight::ProductionManager();
+		$projectsOU = $productionManager->getBelongedProjects($userID);
+		if(!$projectsOU) {
+			$projectsOU = Array();
+		}
+		Flight::json($projectsOU);
 	}
 	
 	public static function editProject() {
@@ -152,6 +161,25 @@ abstract class ProjectController {
 				Flight::json(true);
 			} else {
 				Flight::halt(false);
+			}
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
+
+	public static function removeCanvas($projectID, $canvasID) {
+		$DB = Flight::DB();
+		$canvasManager = new CanvasManager($DB);
+		$userManager = Flight::UserManager();
+		
+		// TODO: Is the user allowed to remove a canvas?!
+
+		if(isset($projectID)) {
+			$success = $canvasManager->removeCanvas($projectID, $canvasID);
+			if($success) {
+				Flight::json(true);
+			} else {
+				Flight::halt(404, "This canvas does not exist.");
 			}
 		} else {
 			Flight::halt(400, "400 - Bad Request");
