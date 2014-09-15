@@ -98,6 +98,10 @@ Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, 
 	ProjectController::getCanvas($projectID, $canvasID);
 });
 
+Flight::route('POST /project/@projectID/canvas', function ($projectID) {
+	ProjectController::newCanvas($projectID);
+});
+
 Flight::route('POST /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
 	// TODO!!!
 });
