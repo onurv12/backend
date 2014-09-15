@@ -94,6 +94,10 @@ Flight::route('GET /project/@id', function ($id) {
 	ProjectController::get($id);
 });
 
+Flight::route('PUT /project/@id', function ($id) {
+	ProjectController::updateProject($id);
+});
+
 Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
 	ProjectController::getCanvas($projectID, $canvasID);
 });

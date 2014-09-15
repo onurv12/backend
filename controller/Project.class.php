@@ -46,6 +46,16 @@ abstract class ProjectController {
 		}
 	}
 
+	
+	public static function updateProject ($projectID) {
+		$productionManager = Flight::ProductionManager();
+		$request = Flight::request();
+		$data = $request->data;
+
+		// TODO: Permission
+		$productionManager->updateProject($projectID, $data);
+	}
+
 	public static function newCanvas ($projectID) {
 		$DB = Flight::DB();
 		$productionManager = Flight::ProductionManager();
