@@ -51,6 +51,14 @@ Flight::route('GET /user', function () {
 	UserController::getSession();
 });
 
+Flight::route('GET /user/@id', function($id) {
+	UserController::getUser($id);
+});
+
+Flight::route('GET /user/@id/projects', function($id) {
+	ProjectController::getProjectsOfUser($id);
+});
+
 Flight::route('GET /users/active', function() {
 	UserController::getActiveUsers();
 });
@@ -98,6 +106,10 @@ Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, 
 	ProjectController::getCanvas($projectID, $canvasID);
 });
 
+Flight::route('POST /project/@projectID/canvas', function ($projectID) {
+	ProjectController::newCanvas($projectID);
+});
+
 Flight::route('POST /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
 	// TODO!!!
 });
@@ -107,7 +119,7 @@ Flight::route('PUT /project/@projectID/canvas/@canvasID', function ($projectID, 
 });
 
 Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
-	// TODO!!!
+	ProjectController::removeCanvas($projectID, $canvasID);
 });
 
 //Activate user
@@ -116,8 +128,7 @@ Flight::route('POST /user/activate', function() {
 });
 
 Flight::route('PUT /user', function() {
-	//TODO: Add a detection which evaluates what kind of change it is
-	UserController::changeRole();
+	UserController::updateUser();
 });
 
 // Registration
