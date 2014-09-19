@@ -64,6 +64,10 @@ Flight::route('POST /project', function() {
 	ProjectController::createProject();
 });
 
+Flight::route('PUT /project/@projectID', function($projectID) {
+	ProjectController::updateProject($projectID);
+});
+
 Flight::route('DELETE /project/@projectID', function($projectID) {
 	ProjectController::deleteProject($projectID);
 });
@@ -84,6 +88,10 @@ Flight::route('GET /projects/belonged', function() {
 
 Flight::route('GET /project/@id', function ($id) {
 	ProjectController::get($id);
+});
+
+Flight::route('GET /project/@id/users', function ($id) {
+	ProjectController::getProjectUsers($id);
 });
 
 Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
