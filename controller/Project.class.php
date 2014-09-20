@@ -56,6 +56,18 @@ abstract class ProjectController {
 		$productionManager->updateProject($projectID, $data);
 	}
 
+	public static function saveCanvas ($projectID, $canvasID) {
+		$DB = Flight::DB();
+		$canvasManager = new CanvasManager($DB);
+		$request = Flight::request();
+		$data = $request->data;
+
+		// TODO: Permission
+		$canvasManager->updatePanel($projectID, $data);
+		// TODO: Prevent manipulating assets that are assigned to another project...
+		$canvasManager->updateAssets($canvasID, $data["Assets"]);
+	}
+
 	public static function newCanvas ($projectID) {
 		$DB = Flight::DB();
 		$productionManager = Flight::ProductionManager();

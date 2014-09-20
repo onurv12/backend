@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 14. Aug 2014 um 16:49
+-- Erstellungszeit: 20. Sep 2014 um 14:39
 -- Server Version: 5.6.19
 -- PHP-Version: 5.5.14
 
@@ -57,10 +57,10 @@ CREATE TABLE IF NOT EXISTS `Asset2Canvas` (
   `AssetID` int(10) unsigned NOT NULL,
   `CanvasID` int(10) unsigned NOT NULL,
   `Index` int(11) NOT NULL,
-  `top` float unsigned NOT NULL,
-  `left` float unsigned NOT NULL,
-  `scaleX` float unsigned NOT NULL,
-  `scaleY` float unsigned NOT NULL,
+  `top` double unsigned NOT NULL,
+  `left` double unsigned NOT NULL,
+  `scaleX` double unsigned NOT NULL,
+  `scaleY` double unsigned NOT NULL,
   `flipX` tinyint(1) NOT NULL,
   `flipY` tinyint(1) NOT NULL,
   `angle` float NOT NULL
