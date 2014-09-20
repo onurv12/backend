@@ -94,6 +94,10 @@ Flight::route('GET /project/@id', function ($id) {
 	ProjectController::get($id);
 });
 
+Flight::route('PUT /project/@id', function ($id) {
+	ProjectController::updateProject($id);
+});
+
 Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
 	ProjectController::getCanvas($projectID, $canvasID);
 });
@@ -102,12 +106,8 @@ Flight::route('POST /project/@projectID/canvas', function ($projectID) {
 	ProjectController::newCanvas($projectID);
 });
 
-Flight::route('POST /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
-	// TODO!!!
-});
-
 Flight::route('PUT /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
-	// TODO!!!
+	ProjectController::saveCanvas($projectID, $canvasID);
 });
 
 Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
