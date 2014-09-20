@@ -1,6 +1,6 @@
 {
 	"require": {
-		"mikecao/flight":	"dev-master",
-		"swiftmailer/swiftmailer": "@stable"
+		"mikecao/flight":	"v1.2",
+		"swiftmailer/swiftmailer": "v5.2.1"
 	}
 }
