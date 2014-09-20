@@ -92,7 +92,6 @@ abstract class UserController {
 	}
 	
 	public static function getSuspendedUsers() {
-		$DB = Flight::DB();
 		$userManager = Flight::UserManager();
 		$allUsers = $userManager->getAllSuspendedUsers();
 		if ($allUsers) {
@@ -104,7 +103,6 @@ abstract class UserController {
 	}
 	
 	public static function activateUser() {
-		$DB = Flight::DB();
 		$userManager = Flight::UserManager();
 		if (!$userManager->getSession()["isAdmin"])
 			Flight::halt(401, "401 Unauthorized - You are not logged in as administrator.");
@@ -125,6 +123,20 @@ abstract class UserController {
 			}	
 		} else {
 			Flight::json(false);
+		}
+	}
+	
+	public static function sendRandomPassword() {
+		$userManager = Flight::UserManager();
+		$request = Flight::request();
+		$password = $request->data->Password;
+		$user = $request->data->User;
+		if(isset($password) && isset($user)) {
+			$success = $userManager->updateUser($user["ID"], "Password", md5($password));
+			MailService::sendTemplate("New Password", "noreply@paperdreamer.org", "Paperdreamer", $user["Email"], $user["Fullname"], "mailTemplates/randomPassword.html", "mailTemplates/randomPassword.txt", Array("Fullname" => $user["Fullname"], "Password" => $password));
+			Flight::json($success);
+		} else {
+			Flight::halt(400, "400 - Bad Request");
 		}
 	}
 	

@@ -59,6 +59,10 @@ Flight::route('GET /user/@id/projects', function($id) {
 	ProjectController::getProjectsOfUser($id);
 });
 
+Flight::route('POST /user/randomPass', function() {
+	UserController::sendRandomPassword();
+});
+
 Flight::route('GET /users/active', function() {
 	UserController::getActiveUsers();
 });
