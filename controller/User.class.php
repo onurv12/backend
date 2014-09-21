@@ -129,9 +129,9 @@ abstract class UserController {
 	public static function sendRandomPassword() {
 		$userManager = Flight::UserManager();
 		$request = Flight::request();
-		$password = $request->data->Password;
 		$user = $request->data->User;
-		if(isset($password) && isset($user)) {
+		$password = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+		if(isset($user)) {
 			$success = $userManager->updateUser($user["ID"], "Password", md5($password));
 			MailService::sendTemplate("New Password", "noreply@paperdreamer.org", "Paperdreamer", $user["Email"], $user["Fullname"], "mailTemplates/randomPassword.html", "mailTemplates/randomPassword.txt", Array("Fullname" => $user["Fullname"], "Password" => $password));
 			Flight::json($success);
