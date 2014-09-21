@@ -59,6 +59,10 @@ Flight::route('GET /user/@id/projects', function($id) {
 	ProjectController::getProjectsOfUser($id);
 });
 
+Flight::route('POST /user/randomPass', function() {
+	UserController::sendRandomPassword();
+});
+
 Flight::route('GET /users/active', function() {
 	UserController::getActiveUsers();
 });
@@ -101,6 +105,10 @@ Flight::route('GET /project/@id', function ($id) {
 Flight::route('GET /project/@id/users', function ($id) {
 	ProjectController::getProjectUsers($id);
 });
+	
+Flight::route('PUT /project/@id', function ($id) {
+	ProjectController::updateProject($id);
+});
 
 Flight::route('GET /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
 	ProjectController::getCanvas($projectID, $canvasID);
@@ -110,12 +118,8 @@ Flight::route('POST /project/@projectID/canvas', function ($projectID) {
 	ProjectController::newCanvas($projectID);
 });
 
-Flight::route('POST /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
-	// TODO!!!
-});
-
 Flight::route('PUT /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
-	// TODO!!!
+	ProjectController::saveCanvas($projectID, $canvasID);
 });
 
 Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
