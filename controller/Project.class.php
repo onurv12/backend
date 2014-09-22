@@ -88,8 +88,7 @@ abstract class ProjectController {
 		$canvasManager->addCanvas($projectID, $requestData["PositionIndex"], $requestData["Title"], $requestData["Description"], $requestData["Notes"]);
 	}
 	
-	public static function updateProject($projectId) {
-		$DB = Flight::DB();
+	public static function updateUsers($projectId) {
 		$productionManager = Flight::ProductionManager();
 		$userManager = Flight::UserManager();
 		$request = Flight::request();
@@ -97,11 +96,10 @@ abstract class ProjectController {
 		if (!$userManager->getSession())
 			Flight::halt(403, "Please login!");
 		
-		if (isset($request->data->Name) && isset($request->data->Director) && $userManager->getUserID($request->data->Director)) {
-			if (!$userManager->checkAdmin()) { //TODO: Check if user is actually the director
+		if (isset($request->data->Director) && $userManager->getUserID($request->data->Director)) {
+			if (!$userManager->checkAdmin()) { //TODO: Check if user is actually the director or supervisor
 				Flight::halt(403, "You are not logged in as admin nor are you the director. For that reason you cannot create the project.");
 			}
-			$productionManager->updateProject($projectId, $request->data->Name, $request->data->Description);
 			$productionManager->removeAllUsersFromProject($projectId);
 			$productionManager->addUser2Project($userManager->getUserID($request->data->Director), $projectId, "Director");
 			
@@ -124,7 +122,7 @@ abstract class ProjectController {
 			
 			Flight::json(true);
 		} else {
-			Flight::halt(403, "Please specify at least name and director");
+			Flight::halt(403, "Please specify at least the director");
 		}
 	}
 	
