@@ -62,15 +62,23 @@
 		}
 
 		public function createUser ($username, $fullname, $password, $email, $gravatarEmail) {
-			// check if the username or email adress is already registered
 			$parameters = Array();
 			$parameters[":username"] = $username;
 			$parameters[":fullname"] = $fullname;
 			$parameters[":passwordHash"] = $this->hash($password);
 			$parameters[":email"] = $email;
 			$parameters[":gravatarEmail"] = $gravatarEmail;
-
-			$this->DB->query("INSERT INTO " . USER_TABLE . " (Name, Fullname, PasswordHash, Email, GravatarEmail) VALUES (:username, :fullname, :passwordHash, :email, :gravatarEmail)", $parameters);
+			$data[":param"] = $username;
+			$userExists = is_array($this->DB->getRow("SELECT * FROM " . USER_TABLE . " WHERE Name = :param", $data));
+			$data[":param"] = $email;
+			$emailExists = is_array($this->DB->getRow("SELECT * FROM " . USER_TABLE . " WHERE Email = :param", $data));
+			if($userExists) {
+				throw new Exception("This Username already exists!");
+			} else if($emailExists) {
+				throw new Exception("This E-Mail address already exists!");
+			} else {
+				$this->DB->query("INSERT INTO " . USER_TABLE . " (Name, Fullname, PasswordHash, Email, GravatarEmail) VALUES (:username, :fullname, :passwordHash, :email, :gravatarEmail)", $parameters);
+			}
 		}
 
 		public function changePassword ($userID, $newPassword) {
@@ -264,12 +272,16 @@
 		public function updateUser($userID, $action, $newValue) {
 			$parameters = Array();
 			$parameters[":userID"] = $userID;
-			//$parameters[":action"] = $action;
 			$parameters[":newValue"] = $newValue;
 			switch($action) {
 				case "Email":
-					//TODO: Getting a magical syntax error when I write :action instead of Email. Fixing that would make this method a lot easier and prettier
-					$result = $this->DB->query("UPDATE " . USER_TABLE . " SET Email = :newValue WHERE ID = :userID", $parameters);
+					$temp[":email"] = $newValue;
+					$emailExists = is_array($this->DB->getRow("SELECT * FROM " . USER_TABLE . " WHERE Email = :email", $temp));
+					if($emailExists) {
+						throw new Exception("This E-Mail address already exists!");
+					} else {
+						$result = $this->DB->query("UPDATE " . USER_TABLE . " SET Email = :newValue WHERE ID = :userID", $parameters);
+					}
 					break;
 				case "GravatarEmail":
 					$result = $this->DB->query("UPDATE " . USER_TABLE . " SET GravatarEmail = :newValue WHERE ID = :userID", $parameters);

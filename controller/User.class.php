@@ -55,7 +55,7 @@ abstract class UserController {
 				try {
 					$userManager->createUser($json["Name"], $json["Fullname"], $json["Password"], $json["Email"], $json["GravatarEmail"]);
 				} catch (Exception $e) {
-					Flight::halt(409, "Conflict. User already exists.");
+					Flight::halt(409, $e->getMessage());
 				}
 
 				// Sending a confirmation mail
@@ -157,7 +157,11 @@ abstract class UserController {
 				if(!$userManager->checkAdmin() && $userID != $userManager->getSession()["ID"]) {
 					Flight::halt(403, "403 - Forbidden Access");
 				}
-				$success = $userManager->updateUser($userID, $action, $newValue);
+				try {
+					$success = $userManager->updateUser($userID, $action, $newValue);
+				} catch(Exception $e) {
+					Flight::halt(409, $e->getMessage());
+				}
 				Flight::json($success);
 			}
 
