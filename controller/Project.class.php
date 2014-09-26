@@ -18,22 +18,26 @@ abstract class ProjectController {
 			if (!$userManager->checkAdmin() && $request->data->Director != $userManager->getSession()["Name"]) {
 				Flight::halt(403, "You are not logged in as admin nor are you the director. For that reason you cannot create the project.");
 			}
-			$projectId = $productionManager->createProject($request->data->Name, $request->data->Description, $userManager->getUserID($request->data->Director));
+			$projectId = $productionManager->createProject($request->data->Name, $request->data->Description);
 			if ($projectId) {
+				$productionManager->addUser2Project($userManager->getUserID($request->data->Director), $projectId, "Director");
+				
 				$supervisors = $request->data->supervisors;
 				$artists = $request->data->artists;
 				$count = count($supervisors);
 				for ($i = 0; $i < $count; $i++) {
 					$userId = $userManager->getUserID($supervisors[$i]["Name"]);
-					if (!$userId || $supervisors[$i]["Name"] == $request->data->Director)
+					if (!$userId || $supervisors[$i]["Name"] == $request->data->Director) {
 						continue;
+					}
 					$productionManager->addUser2Project($userId, $projectId, "Supervisor");
 				}
 				$count = count($artists);
 				for ($i = 0; $i < $count; $i++) {
 					$userId = $userManager->getUserID($artists[$i]["Name"]);
-					if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director)
+					if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director) {
 						continue;
+					}
 					$productionManager->addUser2Project($userId, $projectId, "Artist");
 				}
 				
@@ -86,6 +90,46 @@ abstract class ProjectController {
 		$canvasManager->addCanvas($projectID, $requestData["PositionIndex"], $requestData["Title"], $requestData["Description"], $requestData["Notes"]);
 	}
 	
+	public static function updateUsers($projectId) {
+		$productionManager = Flight::ProductionManager();
+		$userManager = Flight::UserManager();
+		$request = Flight::request();
+		
+		if (!$userManager->getSession())
+			Flight::halt(403, "Please login!");
+		
+		if (isset($request->data->Director) && $userManager->getUserID($request->data->Director)) {
+			if (!$userManager->checkAdmin()) { //TODO: Check if user is actually the director or supervisor
+				Flight::halt(403, "You are not logged in as admin nor are you the director. For that reason you cannot create the project.");
+			}
+			$productionManager->removeAllUsersFromProject($projectId);
+			$productionManager->addUser2Project($userManager->getUserID($request->data->Director), $projectId, "Director");
+			
+			$supervisors = $request->data->supervisors;
+			$artists = $request->data->artists;
+			$count = count($supervisors);
+			for ($i = 0; $i < $count; $i++) {
+				$userId = $userManager->getUserID($supervisors[$i]["Name"]);
+				if (!$userId || $supervisors[$i]["Name"] == $request->data->Director) {
+					continue;
+				}
+				$productionManager->addUser2Project($userId, $projectId, "Supervisor");
+			}
+			$count = count($artists);
+			for ($i = 0; $i < $count; $i++) {
+				$userId = $userManager->getUserID($artists[$i]["Name"]);
+				if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director) {
+					continue;
+				}
+				$productionManager->addUser2Project($userId, $projectId, "Artist");
+			}
+			
+			Flight::json(true);
+		} else {
+			Flight::halt(403, "Please specify at least the director");
+		}
+	}
+	
 	public static function getAllProjects(){
 		$productionManager = Flight::ProductionManager();
 		$allProjects = $productionManager->getAllProjects();
@@ -131,6 +175,18 @@ abstract class ProjectController {
 		$projectInfo["Panels"] = $panels;
 
 		Flight::json($projectInfo);
+	}
+	
+	public static function getProjectUsers ($projectID) {
+		// TODO: Make sure the user is allowed to access this project...!
+		$productionManager = Flight::ProductionManager();
+
+		$users = $productionManager->getProjectUsers($projectID);
+		
+		if (!$users) {
+			Flight::halt(404, "This project could not be found.");
+		}
+		Flight::json($users);
 	}
 
 
