@@ -1,7 +1,7 @@
 <?php
-require_once "../userManagement/CanvasManager.php";
+require_once "manager/CanvasManager.php";
 
-require '../userManagement/ProjectPermission.class.php';
+require 'manager/ProjectPermission.class.php';
 
 abstract class ProjectController {
 
