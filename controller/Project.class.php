@@ -27,15 +27,17 @@ abstract class ProjectController {
 				$count = count($supervisors);
 				for ($i = 0; $i < $count; $i++) {
 					$userId = $userManager->getUserID($supervisors[$i]["Name"]);
-					if (!$userId || $supervisors[$i]["Name"] == $request->data->Director)
+					if (!$userId || $supervisors[$i]["Name"] == $request->data->Director) {
 						continue;
+					}
 					$productionManager->addUser2Project($userId, $projectId, "Supervisor");
 				}
 				$count = count($artists);
 				for ($i = 0; $i < $count; $i++) {
 					$userId = $userManager->getUserID($artists[$i]["Name"]);
-					if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director)
+					if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director) {
 						continue;
+					}
 					$productionManager->addUser2Project($userId, $projectId, "Artist");
 				}
 				
@@ -108,15 +110,17 @@ abstract class ProjectController {
 			$count = count($supervisors);
 			for ($i = 0; $i < $count; $i++) {
 				$userId = $userManager->getUserID($supervisors[$i]["Name"]);
-				if (!$userId || $supervisors[$i]["Name"] == $request->data->Director)
+				if (!$userId || $supervisors[$i]["Name"] == $request->data->Director) {
 					continue;
+				}
 				$productionManager->addUser2Project($userId, $projectId, "Supervisor");
 			}
 			$count = count($artists);
 			for ($i = 0; $i < $count; $i++) {
 				$userId = $userManager->getUserID($artists[$i]["Name"]);
-				if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director)
+				if (!$userId || in_array($artists[$i]["Name"], $supervisors) || $artists[$i]["Name"] == $request->data->Director) {
 					continue;
+				}
 				$productionManager->addUser2Project($userId, $projectId, "Artist");
 			}
 			
@@ -175,7 +179,6 @@ abstract class ProjectController {
 	
 	public static function getProjectUsers ($projectID) {
 		// TODO: Make sure the user is allowed to access this project...!
-		$DB = Flight::DB();
 		$productionManager = Flight::ProductionManager();
 
 		$users = $productionManager->getProjectUsers($projectID);
