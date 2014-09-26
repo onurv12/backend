@@ -19,20 +19,20 @@
 			$this->timezone = new DateTimeZone($timezone); // TODO: Parametrize this
 		}
 
-		public function login ($username, $password) {
+		public function login ($username, $passwordHash) {
 			// generate new token
 			// create session
 			// return the userdata
 
 			$parameters = Array();
 			$parameters[":username"] = $username;
-			$parameters[":password"] = $this->hash($password);
+			$parameters[":passwordHash"] = $passwordHash;
 			
 			// Get the user data
 			$userdata = $this->DB->getRow("SELECT " . USER_TABLE . ".*, ".
 			                                      "EXISTS(SELECT " . USER_TABLE . ".ID FROM " . ADMIN_TABLE . " WHERE " . USER_TABLE . ".ID = " . ADMIN_TABLE . ".UserID) AS isAdmin, " . 
 			                                      "EXISTS(SELECT " . USER_TABLE . ".ID FROM " . ADMIN_TABLE . " WHERE " . USER_TABLE . ".ID = " . ADMIN_TABLE . ".UserID AND " . ADMIN_TABLE . ".Deleteable = 1) AS isDeleteable " .
-			                                      "FROM " . USER_TABLE ." WHERE Name = :username AND PasswordHash = :password", $parameters);
+			                                      "FROM " . USER_TABLE ." WHERE Name = :username AND PasswordHash = :passwordHash", $parameters);
 
 			// If userdata was found, apply it to the session
 			if ($userdata) {
@@ -61,11 +61,11 @@
 			}
 		}
 
-		public function createUser ($username, $fullname, $password, $email, $gravatarEmail) {
+		public function createUser ($username, $fullname, $passwordHash, $email, $gravatarEmail) {
 			$parameters = Array();
 			$parameters[":username"] = $username;
 			$parameters[":fullname"] = $fullname;
-			$parameters[":passwordHash"] = $this->hash($password);
+			$parameters[":passwordHash"] = $passwordHash;
 			$parameters[":email"] = $email;
 			$parameters[":gravatarEmail"] = $gravatarEmail;
 			$data[":param"] = $username;
