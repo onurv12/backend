@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 20. Sep 2014 um 14:39
+-- Erstellungszeit: 28. Sep 2014 um 14:40
 -- Server Version: 5.6.19
 -- PHP-Version: 5.5.14
 
@@ -17,8 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `paperdreamer`
 --
+-- Datenbank: `paperdreamer`
 
 -- --------------------------------------------------------
 
@@ -30,6 +30,13 @@ CREATE TABLE IF NOT EXISTS `Admins` (
   `UserID` int(11) NOT NULL,
   `Deleteable` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `Admins`
+--
+
+INSERT INTO `Admins` (`UserID`, `Deleteable`) VALUES
+(1, 0);
 
 -- --------------------------------------------------------
 
@@ -44,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `Asset` (
   `ProjectID` int(10) unsigned NOT NULL,
   `Global` tinyint(1) NOT NULL,
   `Filename` varchar(128) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -56,15 +63,15 @@ CREATE TABLE IF NOT EXISTS `Asset2Canvas` (
 `ID` int(10) unsigned NOT NULL,
   `AssetID` int(10) unsigned NOT NULL,
   `CanvasID` int(10) unsigned NOT NULL,
-  `Index` int(11) NOT NULL,
-  `top` double unsigned NOT NULL,
-  `left` double unsigned NOT NULL,
-  `scaleX` double unsigned NOT NULL,
-  `scaleY` double unsigned NOT NULL,
-  `flipX` tinyint(1) NOT NULL,
-  `flipY` tinyint(1) NOT NULL,
-  `angle` float NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+  `Index` int(11) NOT NULL DEFAULT '1',
+  `top` double NOT NULL DEFAULT '0',
+  `left` double NOT NULL DEFAULT '0',
+  `scaleX` double NOT NULL DEFAULT '1',
+  `scaleY` double NOT NULL DEFAULT '1',
+  `flipX` tinyint(1) NOT NULL DEFAULT '0',
+  `flipY` tinyint(1) NOT NULL DEFAULT '0',
+  `angle` float NOT NULL DEFAULT '0'
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
@@ -79,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `Canvas` (
   `Notes` text NOT NULL,
   `ProjectID` int(10) unsigned NOT NULL,
   `PositionIndex` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -92,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
   `Name` varchar(255) NOT NULL DEFAULT 'New Project',
   `Description` text,
   `Approved` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -115,9 +122,8 @@ CREATE TABLE IF NOT EXISTS `Session` (
 CREATE TABLE IF NOT EXISTS `Tag` (
 `ID` int(10) unsigned NOT NULL,
   `Name` varchar(50) NOT NULL,
-  `CreatorUserID` int(10) unsigned NOT NULL,
-  `ParentTagID` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `CreatorUserID` int(10) unsigned NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -144,7 +150,14 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `PasswordHash` text NOT NULL,
   `GravatarEmail` varchar(255) NOT NULL,
   `Suspended` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+
+--
+-- Daten für Tabelle `Users`
+--
+
+INSERT INTO `Users` (`ID`, `Name`, `Fullname`, `Email`, `PasswordHash`, `GravatarEmail`, `Suspended`) VALUES
+(1, 'admin', 'Admin', '', '21232f297a57a5a743894a0e4a801fc3', '', 0);
 
 -- --------------------------------------------------------
 
@@ -157,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `UsersInProjects` (
   `UserID` int(11) NOT NULL,
   `ProjectID` int(11) NOT NULL,
   `Role` enum('Director','Supervisor','Artist','Observer') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Indexes for dumped tables
@@ -203,7 +216,7 @@ ALTER TABLE `Session`
 -- Indexes for table `Tag`
 --
 ALTER TABLE `Tag`
- ADD PRIMARY KEY (`ID`);
+ ADD PRIMARY KEY (`ID`), ADD UNIQUE KEY `Name` (`Name`);
 
 --
 -- Indexes for table `Tag2Asset`
@@ -231,37 +244,37 @@ ALTER TABLE `UsersInProjects`
 -- AUTO_INCREMENT for table `Asset`
 --
 ALTER TABLE `Asset`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `Asset2Canvas`
 --
 ALTER TABLE `Asset2Canvas`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `Canvas`
 --
 ALTER TABLE `Canvas`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `Projects`
 --
 ALTER TABLE `Projects`
-MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `Tag`
 --
 ALTER TABLE `Tag`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT;
+MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `UsersInProjects`
 --
 ALTER TABLE `UsersInProjects`
-MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- Constraints der exportierten Tabellen
 --
