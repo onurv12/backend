@@ -11,9 +11,9 @@ abstract class UserController {
 		$headers = apache_request_headers();
 		$request = Flight::request();
 
-		if (isset($headers["username"], $headers["password"])) {
+		if (isset($headers["username"], $headers["passwordHash"])) {
 			try {
-				$userdata = $userManager->login($headers["username"], $headers["password"]);
+				$userdata = $userManager->login($headers["username"], $headers["passwordHash"]);
 
 				if ($userdata) {
 					Flight::json($userdata);
@@ -47,13 +47,13 @@ abstract class UserController {
 			}
 
 			
-			if (isset($json["Name"], $json["Fullname"], $json["Password"], $json["Email"])) {
-				if (!(validation::minLength($json["Name"], 3) && validation::minLength($json["Fullname"], 3) && validation::minLength($json["Password"], 6) && validation::email($json["Email"]) && ($json["GravatarEmail"] == null || validation::email($json["GravatarEmail"])))) {
+			if (isset($json["Name"], $json["Fullname"], $json["PasswordHash"], $json["Email"])) {
+				if (!(validation::minLength($json["Name"], 3) && validation::minLength($json["Fullname"], 3) && validation::email($json["Email"]) && ($json["GravatarEmail"] == null || validation::email($json["GravatarEmail"])))) {
 					Flight::halt(400, "Bad request.");
 				}
 
 				try {
-					$userManager->createUser($json["Name"], $json["Fullname"], $json["Password"], $json["Email"], $json["GravatarEmail"]);
+					$userManager->createUser($json["Name"], $json["Fullname"], $json["PasswordHash"], $json["Email"], $json["GravatarEmail"]);
 				} catch (Exception $e) {
 					Flight::halt(409, $e->getMessage());
 				}
