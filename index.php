@@ -9,6 +9,7 @@ require 'manager/ProductionManager.class.php';
 require 'validation.class.php';
 require 'controller/User.class.php';
 require 'controller/Project.class.php';
+require 'controller/Asset.class.php';
 
 $dbSettings = Array();
 // DBName
@@ -128,6 +129,34 @@ Flight::route('PUT /project/@projectID/canvas/@canvasID', function ($projectID, 
 
 Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectID, $canvasID) {
 	ProjectController::removeCanvas($projectID, $canvasID);
+});
+
+Flight::route('POST /project/@projectID/canvas/@canvasID/assets/@assetID', function ($projectID, $canvasID, $assetID) {
+	AssetController::addAssetToCanvas($projectID, $canvasID, $assetID);
+});
+
+Flight::route('DELETE /project/@projectID/canvas/@canvasID/assets/@assetID', function ($projectID, $canvasID, $assetID) {
+	AssetController::removeAsset($projectID, $canvasID, $assetID);
+});
+
+Flight::route('GET /tags', function () {
+	AssetController::getTags();
+});
+
+Flight::route('POST /tags', function () {
+	AssetController::createTag();
+});
+
+Flight::route('GET /_assets', function () {
+	AssetController::getAssets();
+});
+
+Flight::route('POST /_assets', function () {
+	AssetController::uploadAsset();
+});
+
+Flight::route('POST /asset/@assetID/tag/@tagID', function ($assetID, $tagID) {
+	AssetController::tagAsset($assetID, $tagID);
 });
 
 //Activate user
