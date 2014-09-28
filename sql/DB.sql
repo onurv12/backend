@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
 --
 
 INSERT INTO `Users` (`ID`, `Name`, `Fullname`, `Email`, `PasswordHash`, `GravatarEmail`, `Suspended`) VALUES
-(1, 'admin', 'Admin', '', '21232f297a57a5a743894a0e4a801fc3', '', 0);
+(1, 'admin', 'Admin', '', 'f6fdffe48c908deb0f4c3bd36c032e72', '', 0);
 
 -- --------------------------------------------------------
 
