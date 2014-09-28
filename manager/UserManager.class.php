@@ -19,20 +19,20 @@
 			$this->timezone = new DateTimeZone($timezone); // TODO: Parametrize this
 		}
 
-		public function login ($username, $password) {
+		public function login ($username, $passwordHash) {
 			// generate new token
 			// create session
 			// return the userdata
 
 			$parameters = Array();
 			$parameters[":username"] = $username;
-			$parameters[":password"] = $this->hash($password);
+			$parameters[":passwordHash"] = $passwordHash;
 			
 			// Get the user data
 			$userdata = $this->DB->getRow("SELECT " . USER_TABLE . ".*, ".
 			                                      "EXISTS(SELECT " . USER_TABLE . ".ID FROM " . ADMIN_TABLE . " WHERE " . USER_TABLE . ".ID = " . ADMIN_TABLE . ".UserID) AS isAdmin, " . 
 			                                      "EXISTS(SELECT " . USER_TABLE . ".ID FROM " . ADMIN_TABLE . " WHERE " . USER_TABLE . ".ID = " . ADMIN_TABLE . ".UserID AND " . ADMIN_TABLE . ".Deleteable = 1) AS isDeleteable " .
-			                                      "FROM " . USER_TABLE ." WHERE Name = :username AND PasswordHash = :password", $parameters);
+			                                      "FROM " . USER_TABLE ." WHERE Name = :username AND PasswordHash = :passwordHash", $parameters);
 
 			// If userdata was found, apply it to the session
 			if ($userdata) {
@@ -61,16 +61,24 @@
 			}
 		}
 
-		public function createUser ($username, $fullname, $password, $email, $gravatarEmail) {
-			// check if the username or email adress is already registered
+		public function createUser ($username, $fullname, $passwordHash, $email, $gravatarEmail) {
 			$parameters = Array();
 			$parameters[":username"] = $username;
 			$parameters[":fullname"] = $fullname;
-			$parameters[":passwordHash"] = $this->hash($password);
+			$parameters[":passwordHash"] = $passwordHash;
 			$parameters[":email"] = $email;
 			$parameters[":gravatarEmail"] = $gravatarEmail;
-
-			$this->DB->query("INSERT INTO " . USER_TABLE . " (Name, Fullname, PasswordHash, Email, GravatarEmail) VALUES (:username, :fullname, :passwordHash, :email, :gravatarEmail)", $parameters);
+			$data[":param"] = $username;
+			$userExists = is_array($this->DB->getRow("SELECT * FROM " . USER_TABLE . " WHERE Name = :param", $data));
+			$data[":param"] = $email;
+			$emailExists = is_array($this->DB->getRow("SELECT * FROM " . USER_TABLE . " WHERE Email = :param", $data));
+			if($userExists) {
+				throw new Exception("This Username already exists!");
+			} else if($emailExists) {
+				throw new Exception("This E-Mail address already exists!");
+			} else {
+				$this->DB->query("INSERT INTO " . USER_TABLE . " (Name, Fullname, PasswordHash, Email, GravatarEmail) VALUES (:username, :fullname, :passwordHash, :email, :gravatarEmail)", $parameters);
+			}
 		}
 
 		public function changePassword ($userID, $newPassword) {
@@ -264,12 +272,16 @@
 		public function updateUser($userID, $action, $newValue) {
 			$parameters = Array();
 			$parameters[":userID"] = $userID;
-			//$parameters[":action"] = $action;
 			$parameters[":newValue"] = $newValue;
 			switch($action) {
 				case "Email":
-					//TODO: Getting a magical syntax error when I write :action instead of Email. Fixing that would make this method a lot easier and prettier
-					$result = $this->DB->query("UPDATE " . USER_TABLE . " SET Email = :newValue WHERE ID = :userID", $parameters);
+					$temp[":email"] = $newValue;
+					$emailExists = is_array($this->DB->getRow("SELECT * FROM " . USER_TABLE . " WHERE Email = :email", $temp));
+					if($emailExists) {
+						throw new Exception("This E-Mail address already exists!");
+					} else {
+						$result = $this->DB->query("UPDATE " . USER_TABLE . " SET Email = :newValue WHERE ID = :userID", $parameters);
+					}
 					break;
 				case "GravatarEmail":
 					$result = $this->DB->query("UPDATE " . USER_TABLE . " SET GravatarEmail = :newValue WHERE ID = :userID", $parameters);
