@@ -191,9 +191,6 @@ abstract class ProjectController {
 
 		$users = $productionManager->getProjectUsers($projectID);
 
-		if (!$users) {
-			Flight::halt(404, "This project could not be found.");
-		}
 		Flight::json($users);
 	}
 
