@@ -1,59 +1,55 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.6
+-- version 3.4.11.1deb2
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 20. Sep 2014 um 14:39
--- Server Version: 5.6.19
--- PHP-Version: 5.5.14
+-- Generation Time: Sep 28, 2014 at 12:28 PM
+-- Server version: 5.5.37
+-- PHP Version: 5.4.4-14+deb7u9
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
 --
--- Datenbank: `paperdreamer`
+-- Database: `paperdreamer`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Admins`
+-- Table structure for table `Admins`
 --
 
 CREATE TABLE IF NOT EXISTS `Admins` (
   `UserID` int(11) NOT NULL,
-  `Deleteable` tinyint(1) NOT NULL
+  `Deleteable` tinyint(1) NOT NULL,
+  PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Asset`
+-- Table structure for table `Asset`
 --
 
 CREATE TABLE IF NOT EXISTS `Asset` (
-`ID` int(10) unsigned NOT NULL,
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(512) NOT NULL,
   `UploaderID` int(10) unsigned NOT NULL,
   `ProjectID` int(10) unsigned NOT NULL,
   `Global` tinyint(1) NOT NULL,
-  `Filename` varchar(128) NOT NULL
+  `Filename` varchar(128) NOT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Asset2Canvas`
+-- Table structure for table `Asset2Canvas`
 --
 
 CREATE TABLE IF NOT EXISTS `Asset2Canvas` (
-`ID` int(10) unsigned NOT NULL,
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `AssetID` int(10) unsigned NOT NULL,
   `CanvasID` int(10) unsigned NOT NULL,
   `Index` int(11) NOT NULL,
@@ -63,228 +59,157 @@ CREATE TABLE IF NOT EXISTS `Asset2Canvas` (
   `scaleY` double unsigned NOT NULL,
   `flipX` tinyint(1) NOT NULL,
   `flipY` tinyint(1) NOT NULL,
-  `angle` float NOT NULL
+  `angle` float NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Canvas`
+-- Table structure for table `Canvas`
 --
 
 CREATE TABLE IF NOT EXISTS `Canvas` (
-`ID` int(10) unsigned NOT NULL,
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Title` varchar(512) NOT NULL,
   `Description` text NOT NULL,
   `Notes` text NOT NULL,
   `ProjectID` int(10) unsigned NOT NULL,
-  `PositionIndex` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+  `PositionIndex` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Projects`
+-- Table structure for table `Comments`
+--
+
+CREATE TABLE IF NOT EXISTS `Comments` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ProjectID` int(11) NOT NULL,
+  `Title` text NOT NULL,
+  `Text` text NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `Date` date NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Projects`
 --
 
 CREATE TABLE IF NOT EXISTS `Projects` (
-`ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL DEFAULT 'New Project',
   `Description` text,
-  `Approved` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  `Approved` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Session`
+-- Table structure for table `Session`
 --
 
 CREATE TABLE IF NOT EXISTS `Session` (
   `UserID` int(11) NOT NULL,
   `Token` varchar(255) NOT NULL,
-  `Expiration` datetime NOT NULL
+  `Expiration` datetime NOT NULL,
+  PRIMARY KEY (`UserID`),
+  UNIQUE KEY `Token` (`Token`),
+  KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Tag`
+-- Table structure for table `Tag`
 --
 
 CREATE TABLE IF NOT EXISTS `Tag` (
-`ID` int(10) unsigned NOT NULL,
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
   `CreatorUserID` int(10) unsigned NOT NULL,
-  `ParentTagID` int(10) unsigned NOT NULL
+  `ParentTagID` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Tag2Asset`
+-- Table structure for table `Tag2Asset`
 --
 
 CREATE TABLE IF NOT EXISTS `Tag2Asset` (
   `TagID` int(10) unsigned NOT NULL,
-  `AssetID` int(10) unsigned NOT NULL
+  `AssetID` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`TagID`,`AssetID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `Users`
+-- Table structure for table `Users`
 --
 
 CREATE TABLE IF NOT EXISTS `Users` (
-`ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
   `Fullname` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
   `PasswordHash` text NOT NULL,
   `GravatarEmail` varchar(255) NOT NULL,
-  `Suspended` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+  `Suspended` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `UsersInProjects`
+-- Table structure for table `UsersInProjects`
 --
 
 CREATE TABLE IF NOT EXISTS `UsersInProjects` (
-`ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `ProjectID` int(11) NOT NULL,
-  `Role` enum('Director','Supervisor','Artist','Observer') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `Role` enum('Director','Supervisor','Artist','Observer') NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  KEY `ProjectID` (`ProjectID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=71 ;
 
 --
--- Indexes for dumped tables
+-- Constraints for dumped tables
 --
 
 --
--- Indexes for table `Admins`
+-- Constraints for table `Admins`
 --
 ALTER TABLE `Admins`
- ADD PRIMARY KEY (`UserID`);
+  ADD CONSTRAINT `Admins_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indexes for table `Asset`
+-- Constraints for table `Comments`
 --
-ALTER TABLE `Asset`
- ADD PRIMARY KEY (`ID`);
+ALTER TABLE `Comments`
+  ADD CONSTRAINT `Comments_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE SET NULL;
 
 --
--- Indexes for table `Asset2Canvas`
---
-ALTER TABLE `Asset2Canvas`
- ADD PRIMARY KEY (`ID`), ADD UNIQUE KEY `ID` (`ID`);
-
---
--- Indexes for table `Canvas`
---
-ALTER TABLE `Canvas`
- ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `Projects`
---
-ALTER TABLE `Projects`
- ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `Session`
+-- Constraints for table `Session`
 --
 ALTER TABLE `Session`
- ADD PRIMARY KEY (`UserID`), ADD UNIQUE KEY `Token` (`Token`), ADD KEY `UserID` (`UserID`);
+  ADD CONSTRAINT `Session_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indexes for table `Tag`
---
-ALTER TABLE `Tag`
- ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `Tag2Asset`
---
-ALTER TABLE `Tag2Asset`
- ADD PRIMARY KEY (`TagID`,`AssetID`);
-
---
--- Indexes for table `Users`
---
-ALTER TABLE `Users`
- ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `UsersInProjects`
+-- Constraints for table `UsersInProjects`
 --
 ALTER TABLE `UsersInProjects`
- ADD PRIMARY KEY (`ID`), ADD KEY `UserID` (`UserID`), ADD KEY `ProjectID` (`ProjectID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `Asset`
---
-ALTER TABLE `Asset`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `Asset2Canvas`
---
-ALTER TABLE `Asset2Canvas`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
---
--- AUTO_INCREMENT for table `Canvas`
---
-ALTER TABLE `Canvas`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `Projects`
---
-ALTER TABLE `Projects`
-MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `Tag`
---
-ALTER TABLE `Tag`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `Users`
---
-ALTER TABLE `Users`
-MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
---
--- AUTO_INCREMENT for table `UsersInProjects`
---
-ALTER TABLE `UsersInProjects`
-MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
---
--- Constraints der exportierten Tabellen
---
-
---
--- Constraints der Tabelle `Admins`
---
-ALTER TABLE `Admins`
-ADD CONSTRAINT `Admins_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints der Tabelle `Session`
---
-ALTER TABLE `Session`
-ADD CONSTRAINT `Session_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints der Tabelle `UsersInProjects`
---
-ALTER TABLE `UsersInProjects`
-ADD CONSTRAINT `UsersInProjects_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `UsersInProjects_ibfk_2` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  ADD CONSTRAINT `UsersInProjects_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `UsersInProjects_ibfk_2` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;

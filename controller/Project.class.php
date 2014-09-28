@@ -281,6 +281,42 @@ abstract class ProjectController {
 			Flight::halt(400, "400 - Bad Request");
 		}
 	}
+	
+	public static function addComment($projectID) {
+		$productionManager = Flight::ProductionManager();
+		$request = Flight::request();
+		
+		$title = $request->data->Title;
+		$text = $request->data->Text;
+		$author = $request->data->Author;
+		$date = $request->data->Date;
+		
+		//TODO: Check if user is contained in project
+		if (isset($projectID) && isset($title)) {
+			$productionManager->addComment($projectID, $title, $text, $author, $date);
+			Flight::json(true);
+		} else {
+			Flight::halt(400, "400 - Bad Request: Set at least projectID and Title when creating comments");
+		}
+	}
+
+	public static function deleteComment($projectID, $commentID) {
+		$productionManager = Flight::ProductionManager();
+		
+		//TODO: Check if user owns comment
+		
+		if (isset($projectID) && isset($commentID)) {
+			$productionManager->deleteComment($projectID, $commentID);
+			Flight::json(true);
+		} else {
+			Flight::halt(400, "400 - Bad Request");
+		}
+	}
+	
+	public static function getAllComments($projectID) {
+		$productionManager = Flight::ProductionManager();
+		Flight::json($productionManager->getAllComments($projectID));
+	}
 }
 
 ?>
