@@ -54,20 +54,37 @@
 			return $this->DB->query("UPDATE " . CANVAS_TABLE . " SET Title = :Title, Description = :Description, Notes = :Notes, PositionIndex = :PositionIndex WHERE ID = :ID AND ProjectID = :ProjectID", $parameters);
 		}
 
-		function updateAssets ($AssetID, $assets) {
+		function updateAssets ($CanvasID, $assets) {
 			foreach ($assets as $asset) {
-				$parameters = array();
-				$parameters[":ID"] = $asset["ID"];
-				$parameters[":Index"] = $asset["Index"];
-				$parameters[":top"] = floatval($asset["top"]);
-				$parameters[":left"] = floatval($asset["left"]);
-				$parameters[":scaleX"] = floatval($asset["scaleX"]);
-				$parameters[":scaleY"] = floatval($asset["scaleY"]);
-				$parameters[":flipX"] = $asset["flipX"];
-				$parameters[":flipY"] = $asset["flipY"];
-				$parameters[":angle"] = $asset["angle"];	
+				if (isset($asset["ID"])) {
+					$parameters = array();
+					$parameters[":ID"] = $asset["ID"];
+					$parameters[":Index"] = $asset["Index"];
+					$parameters[":top"] = round(floatval($asset["top"]), 6);
+					$parameters[":left"] = round(floatval($asset["left"]), 6);
+					$parameters[":scaleX"] = round(floatval($asset["scaleX"]), 6);
+					$parameters[":scaleY"] = round(floatval($asset["scaleY"]), 6);
+					$parameters[":flipX"] = (int)$asset["flipX"];
+					$parameters[":flipY"] = (int)$asset["flipY"];
+					$parameters[":angle"] = $asset["angle"];	
 
-				$this->DB->query("UPDATE " . ASSETTOCANVAS_TABLE . " SET `Index` = :Index, top = :top, `left` = :left, scaleX = :scaleX, scaleY = :scaleY, flipX = :flipX, flipY = :flipY, angle = :angle WHERE ID = :ID", $parameters);
+					$this->DB->query("UPDATE " . ASSETTOCANVAS_TABLE . " SET `Index` = :Index, top = :top, `left` = :left, scaleX = :scaleX, scaleY = :scaleY, flipX = :flipX, flipY = :flipY, angle = :angle WHERE ID = :ID", $parameters);	
+				} else {
+					$parameters = array();
+					$parameters[":AssetID"] = $asset["AssetID"];
+					$parameters[":CanvasID"] = $CanvasID;
+					$parameters[":Index"] = $asset["Index"];
+					$parameters[":top"] = round(floatval($asset["top"]), 6);
+					$parameters[":left"] = round(floatval($asset["left"]), 6);
+					$parameters[":scaleX"] = round(floatval($asset["scaleX"]), 6);
+					$parameters[":scaleY"] = round(floatval($asset["scaleY"]), 6);
+					$parameters[":flipX"] = (int)$asset["flipX"];
+					$parameters[":flipY"] = (int)$asset["flipY"];
+					$parameters[":angle"] = $asset["angle"];	
+
+					$this->DB->query("INSERT INTO " . ASSETTOCANVAS_TABLE . " (AssetID, CanvasID, `Index`, top, `left`, scaleX, scaleY, flipX, flipY, angle) VALUES(:AssetID, :CanvasID, :Index, :top, :left, :scaleX, :scaleY, :flipX, :flipY, :angle)", $parameters);
+				}
+				
 			}
 			
 		}
