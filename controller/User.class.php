@@ -169,6 +169,19 @@ abstract class UserController {
 			Flight::halt(400, "400 - Bad Request");
 		}
 	}
+	
+	public static function deleteUser($userID) {
+		$userManager = Flight::UserManager();
+		if(!$userManager->checkAdmin()) {
+			Flight::halt(403, "Forbidden Access");
+		}
+		if(isset($userID)) {
+			$success = $userManager->deleteUser($userID);
+			Flight::json($success);
+		} else {
+			Flight::halt(400, "Bad Request");
+		}
+	}
 
 	public static function getSession () {
 		$userManager = Flight::UserManager();

@@ -80,6 +80,17 @@
 				$this->DB->query("INSERT INTO " . USER_TABLE . " (Name, Fullname, PasswordHash, Email, GravatarEmail) VALUES (:username, :fullname, :passwordHash, :email, :gravatarEmail)", $parameters);
 			}
 		}
+		
+		public function deleteUser($userID) {
+			$parameters = Array();
+			$parameters[":userID"] = $userID;
+			$result = $this->DB->query("DELETE FROM " . USER_TABLE . " WHERE ID = :userID", $parameters);
+			if($result) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 
 		public function changePassword ($userID, $newPassword) {
 			$parameters = Array();
