@@ -187,6 +187,10 @@ Flight::route('PUT /user', function() {
 	UserController::updateUser();
 });
 
+Flight::route('DELETE /user/@id', function($id) {
+	UserController::deleteUser($id);
+});
+
 // Registration
 Flight::route('POST /user', function () {
 	UserController::registration();
