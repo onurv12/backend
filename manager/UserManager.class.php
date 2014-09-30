@@ -299,6 +299,18 @@
 					break;
 				case "Password":
 					$result = $this->DB->query("UPDATE " . USER_TABLE . " SET PasswordHash = :newValue WHERE ID = :userID", $parameters);
+				case "Username":
+					$temp2[":username"] = $newValue;
+					$usernameExists = is_array($this->DB->getRow("SELECT * FROM ". USER_TABLE . " WHERE Name = :username", $temp2));
+					if($usernameExists) {
+						throw new Exception("This Username already exists!");
+					} else {
+						$result = $this->DB->query("UPDATE " . USER_TABLE . " SET Name = :newValue WHERE ID = :userID", $parameters);
+					}
+					break;
+				case "FullName":
+					$result = $this->DB->query("UPDATE " . USER_TABLE . " SET Fullname = :newValue WHERE ID = :userID", $parameters);
+					break;
 			}
 			if($result) {
 				return true;
