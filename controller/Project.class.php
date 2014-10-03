@@ -294,11 +294,10 @@ abstract class ProjectController {
 		$title = $request->data->Title;
 		$text = $request->data->Text;
 		$author = $request->data->Author;
-		$date = $request->data->Date;
 		
 		//TODO: Check if user is contained in project
 		if (isset($projectID) && isset($title)) {
-			$productionManager->addComment($projectID, $title, $text, $author, $date);
+			$productionManager->addComment($projectID, $title, $text, $author);
 			Flight::json(true);
 		} else {
 			Flight::halt(400, "400 - Bad Request: Set at least projectID and Title when creating comments");
