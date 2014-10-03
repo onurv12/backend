@@ -139,15 +139,14 @@
 			return $this->DB->getList("SELECT * FROM " . COMMENT_TABLE . " WHERE ProjectID = :projectID", $parameters);
 		}
 		
-		public function addComment ($projectID, $title, $text, $author, $date) {
+		public function addComment ($projectID, $title, $text, $author) {
 			$parameters = Array();
 			$parameters[":projectID"] = $projectID;
 			$parameters[":title"] = $title;
 			$parameters[":text"] = $text;
 			$parameters[":author"] = $author;
-			$parameters[":date"] = $date;
 			
-			$this->DB->query("INSERT INTO " . COMMENT_TABLE . " (ProjectID, Title, Text, UserID, Date) VALUES(:projectID, :title, :text, :author, :date)", $parameters);
+			$this->DB->query("INSERT INTO " . COMMENT_TABLE . " (ProjectID, Title, Text, UserID, Date) VALUES(:projectID, :title, :text, :author, NOW())", $parameters);
 		}
 		
 		public function deleteComment ($projectID, $commentID) {

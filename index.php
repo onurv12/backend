@@ -18,6 +18,10 @@ $dbSettings[] = DBName;
 $dbSettings[] = DBUser;
 //DBPassword
 $dbSettings[] = DBPassword;
+//DBHost
+$dbSettings[] = DBHost;
+//DBPort
+$dbSettings[] = DBPort;
 
 Flight::register( 'DB', 'dbWrapper', $dbSettings );
 $DB = Flight::DB();
