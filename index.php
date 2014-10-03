@@ -131,6 +131,21 @@ Flight::route('DELETE /project/@projectID/canvas/@canvasID', function ($projectI
 	ProjectController::removeCanvas($projectID, $canvasID);
 });
 
+//Post new comment
+Flight::route('POST /project/@projectID/comment', function ($projectID) {
+	ProjectController::addComment($projectID);
+});
+
+//Remove a comment
+Flight::route('DELETE /project/@projectID/comment/@commentID', function ($projectID, $commentID) {
+	ProjectController::deleteComment($projectID, $commentID);
+});
+
+//Get all comments of a certain project
+Flight::route('GET /project/@projectID/comments', function ($projectID) {
+	ProjectController::getAllComments($projectID);
+});
+
 Flight::route('POST /project/@projectID/canvas/@canvasID/assets/@assetID', function ($projectID, $canvasID, $assetID) {
 	AssetController::addAssetToCanvas($projectID, $canvasID, $assetID);
 });
