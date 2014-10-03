@@ -9,4 +9,5 @@
 	define("CANVAS_TABLE", "Canvas");
 	define("TAG_TABLE", "Tag");
 	define("TAGTOASSET_TABLE", "Tag2Asset");
+	define("COMMENT_TABLE", "Comments");
 ?>

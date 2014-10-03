@@ -132,5 +132,28 @@
 			$parameters[":userID"] = $userID;
 			return $this->DB->getList("SELECT " . PROJECT_TABLE . ".*, " . USERSINPROJECTS_TABLE . ".Role FROM " . PROJECT_TABLE . " JOIN " . USERSINPROJECTS_TABLE . " ON Projects.ID = " . USERSINPROJECTS_TABLE . ".ProjectID WHERE UserID = :userID", $parameters);
 		}
+		
+		public function getAllComments ($projectID) {
+			$parameters = Array();
+			$parameters[":projectID"] = $projectID;
+			return $this->DB->getList("SELECT * FROM " . COMMENT_TABLE . " WHERE ProjectID = :projectID", $parameters);
+		}
+		
+		public function addComment ($projectID, $title, $text, $author, $date) {
+			$parameters = Array();
+			$parameters[":projectID"] = $projectID;
+			$parameters[":title"] = $title;
+			$parameters[":text"] = $text;
+			$parameters[":author"] = $author;
+			$parameters[":date"] = $date;
+			
+			$this->DB->query("INSERT INTO " . COMMENT_TABLE . " (ProjectID, Title, Text, UserID, Date) VALUES(:projectID, :title, :text, :author, :date)", $parameters);
+		}
+		
+		public function deleteComment ($projectID, $commentID) {
+			$parameters = Array();
+			$parameters[":commentID"] = $commentID;
+			$this->DB->query("DELETE FROM " . COMMENT_TABLE . " WHERE ID = :commentID", $parameters);
+		}
 	}
 ?>
