@@ -6,8 +6,7 @@
 ##Dependencies
 The dependencies are installed automatically in the second step of the installtion instruction.
 - Flight (http://flightphp.com)
-- storyboardAWP/dbWrapper
-- storyboardAWP/userManagement
+- paperdreamer/dbWrapper
  
 
 ## Installation
@@ -15,6 +14,3 @@ The dependencies are installed automatically in the second step of the installti
 	-  `curl -sS https://getcomposer.org/installer | php`
 2. Install the dependencies
 	- `php composer.phar install`
-
-## Documentation
-	// TODO
