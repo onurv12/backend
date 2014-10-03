@@ -172,6 +172,23 @@ CREATE TABLE IF NOT EXISTS `UsersInProjects` (
   `Role` enum('Director','Supervisor','Artist','Observer') NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `Comments`
+--
+
+CREATE TABLE IF NOT EXISTS `Comments` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ProjectID` int(11) NOT NULL,
+  `Title` text NOT NULL,
+  `Text` text NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `Date` date NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 --
 -- Indexes for dumped tables
 --
@@ -284,6 +301,13 @@ MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 ALTER TABLE `Admins`
 ADD CONSTRAINT `Admins_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+--
+-- Constraints der Tabelle `Comments`
+--
+ALTER TABLE `Comments`
+ADD CONSTRAINT `Comments_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE SET NULL;
 
 --
 -- Constraints der Tabelle `Session`
