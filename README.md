@@ -14,3 +14,7 @@ The dependencies are installed automatically in the second step of the installti
 	-  `curl -sS https://getcomposer.org/installer | php`
 2. Install the dependencies
 	- `php composer.phar install`
+
+
+##Licensing
+All files in this repository are available under the AGPL license, as described in the LICENSE document.
