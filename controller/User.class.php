@@ -11,9 +11,9 @@ abstract class UserController {
 		$headers = apache_request_headers();
 		$request = Flight::request();
 
-		if (isset($headers["username"], $headers["passwordHash"])) {
+		if (isset($headers["Username"], $headers["Passwordhash"])) {
 			try {
-				$userdata = $userManager->login($headers["username"], $headers["passwordHash"]);
+				$userdata = $userManager->login($headers["Username"], $headers["Passwordhash"]);
 
 				if ($userdata) {
 					Flight::json($userdata);
